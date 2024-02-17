@@ -1,5 +1,7 @@
 # Cubo Rubik
 
+
+
 Este proyecto implementa un simulador del Cubo Rubik en C++ con una interfaz gráfica.
 
 ## Descripción
