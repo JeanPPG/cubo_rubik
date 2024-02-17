@@ -33,14 +33,3 @@ Además, se incluyen algoritmos de optimización para mejorar la eficiencia de l
 
 ## Uso
 
-Para compilar y ejecutar el proyecto, sigue estos pasos:
-
-1. Clona este repositorio: `git clone https://github.com/tu_usuario/cubo-rubik.git`
-2. Navega al directorio del proyecto: `cd cubo-rubik`
-3. Configura y compila el proyecto con CMake: 
-   ```bash
-   mkdir build
-   cd build
-   cmake ..
-   make
-Ejecuta el programa resultante: ./cubo_rubik
