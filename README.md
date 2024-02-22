@@ -4,7 +4,10 @@
 
 Este proyecto implementa un simulador del Cubo Rubik en C++ con una interfaz gráfica.
 
+
 ## Descripción
+
+
 
 El Cubo Rubik es un rompecabezas tridimensional mecánico inventado por el escultor y profesor de arquitectura húngaro Ernő Rubik en 1974. En este proyecto, se proporciona una representación del Cubo Rubik y se implementan varios algoritmos para resolverlo.
 
