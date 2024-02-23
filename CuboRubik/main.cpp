@@ -31,11 +31,23 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
+    // Cambiar el color de fondo a gris
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     // Posiciona la cámara para rotar alrededor del cubo
     float cameraX = cameraRadius * sin(cameraAngleY) * cos(cameraAngleX);
     float cameraY = cameraRadius * cos(cameraAngleY);
     float cameraZ = cameraRadius * sin(cameraAngleY) * sin(cameraAngleX);
     gluLookAt(cameraX, cameraY, cameraZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+    // Definir los colores de las caras del cubo de Rubik
+    glColor3f(1.0, 1.0, 1.0); // Blanco (cara superior)
+    glColor3f(1.0, 1.0, 0.0); // Amarillo (cara inferior)
+    glColor3f(0.0, 0.0, 1.0); // Azul (cara frontal)
+    glColor3f(0.0, 1.0, 0.0); // Verde (cara trasera)
+    glColor3f(1.0, 0.0, 0.0); // Rojo (cara derecha)
+    glColor3f(1.0, 0.5, 0.0); // Naranja (cara izquierda)
 
     // Dibujar el cubo de Rubik
     for (int i = 0; i < 3; ++i) {
@@ -49,47 +61,47 @@ void display()
                 // Dibujar el cubo más pequeño con colores
                 glBegin(GL_QUADS);
 
-                // Cara frontal
-                glColor3f(1.0, 0.0, 0.0); // Rojo
-                glVertex3f(x - 0.5f, y - 0.5f, z + 0.5f);
-                glVertex3f(x + 0.5f, y - 0.5f, z + 0.5f);
-                glVertex3f(x + 0.5f, y + 0.5f, z + 0.5f);
-                glVertex3f(x - 0.5f, y + 0.5f, z + 0.5f);
-
-                // Cara posterior
-                glColor3f(1.0, 1.0, 0.0); // Amarillo
-                glVertex3f(x - 0.5f, y - 0.5f, z - 0.5f);
-                glVertex3f(x - 0.5f, y + 0.5f, z - 0.5f);
-                glVertex3f(x + 0.5f, y + 0.5f, z - 0.5f);
-                glVertex3f(x + 0.5f, y - 0.5f, z - 0.5f);
-
                 // Cara superior
-                glColor3f(0.0, 0.0, 1.0); // Azul
-                glVertex3f(x - 0.5f, y + 0.5f, z + 0.5f);
-                glVertex3f(x + 0.5f, y + 0.5f, z + 0.5f);
-                glVertex3f(x + 0.5f, y + 0.5f, z - 0.5f);
-                glVertex3f(x - 0.5f, y + 0.5f, z - 0.5f);
+                glColor3f(1.0, 1.0, 1.0); // Blanco
+                glVertex3f(x - 0.02f, y + 1.0f, z + 1.02f);
+                glVertex3f(x + 1.02f, y + 1.0f, z + 1.02f);
+                glVertex3f(x + 1.02f, y + 1.0f, z - 0.02f);
+                glVertex3f(x - 0.02f, y + 1.0f, z - 0.02f);
 
                 // Cara inferior
-                glColor3f(0.0, 1.0, 0.0); // Verde
-                glVertex3f(x - 0.5f, y - 0.5f, z + 0.5f);
-                glVertex3f(x + 0.5f, y - 0.5f, z + 0.5f);
-                glVertex3f(x + 0.5f, y - 0.5f, z - 0.5f);
-                glVertex3f(x - 0.5f, y - 0.5f, z - 0.5f);
+                glColor3f(1.0, 1.0, 0.0); // Amarillo
+                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
 
-                // Cara izquierda
-                glColor3f(0.0, 1.0, 1.0); // Cian
-                glVertex3f(x - 0.5f, y - 0.5f, z + 0.5f);
-                glVertex3f(x - 0.5f, y + 0.5f, z + 0.5f);
-                glVertex3f(x - 0.5f, y + 0.5f, z - 0.5f);
-                glVertex3f(x - 0.5f, y - 0.5f, z - 0.5f);
+                // Cara frontal
+                glColor3f(0.0, 0.0, 1.0); // Azul
+                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
+                glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
+
+                // Cara trasera
+                glColor3f(0.0, 1.0, 0.0); // Verde
+                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
+                glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
+                glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
+                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
 
                 // Cara derecha
-                glColor3f(1.0, 0.0, 1.0); // Magenta
-                glVertex3f(x + 0.5f, y - 0.5f, z + 0.5f);
-                glVertex3f(x + 0.5f, y + 0.5f, z + 0.5f);
-                glVertex3f(x + 0.5f, y + 0.5f, z - 0.5f);
-                glVertex3f(x + 0.5f, y - 0.5f, z - 0.5f);
+                glColor3f(1.0, 0.0, 0.0); // Rojo
+                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
+                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+
+                // Cara izquierda
+                glColor3f(1.0, 0.5, 0.0); // Naranja
+                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
+                glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
+                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
 
                 glEnd();
             }
@@ -132,7 +144,7 @@ void motion(int x, int y)
     {
         int deltaX = x - lastMouseX;
         int deltaY = y - lastMouseY;
- 
+
         cameraAngleX += deltaX * 0.01f;
         cameraAngleY += deltaY * 0.01f;
 
