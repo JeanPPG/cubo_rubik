@@ -104,6 +104,48 @@ void display()
                 glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
 
                 glEnd();
+
+                // Dibujar los bordes negros en dirección X
+                glLineWidth(2.0); // Grosor de la línea
+                glColor3f(0.0, 0.0, 0.0);
+                glBegin(GL_LINE_LOOP);
+
+                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
+
+                glEnd();
+
+                // Dibujar los bordes negros en dirección Y
+                glBegin(GL_LINE_LOOP);
+
+                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
+                glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
+                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
+
+                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
+                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+
+                glEnd();
+
+                // Dibujar los bordes negros en dirección Z
+                glBegin(GL_LINE_LOOP);
+
+                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+                glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
+                glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
+
+                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
+                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+                glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
+                glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
+
+                glEnd();
             }
         }
     }
