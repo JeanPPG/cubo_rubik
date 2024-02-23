@@ -1,37 +1,35 @@
-# Cubo Rubik
+# 🎲 Cubo de Rubik en OpenGL 🎨
 
+¡Bienvenido al Cubo de Rubik en OpenGL! Este proyecto es una implementación básica del famoso Cubo de Rubik utilizando OpenGL y GLUT en C++.
 
+## ℹ️ Descripción
 
-Este proyecto implementa un simulador del Cubo Rubik en C++ con una interfaz gráfica. 
+El Cubo de Rubik es un rompecabezas tridimensional inventado por Ernő Rubik en 1974. Consiste en una estructura mecánica conformada por un cubo de 3x3x3 cuyas caras están divididas en cuadros de colores que pueden desplazarse.
 
-## Descripción
+Este proyecto te permite interactuar con un Cubo de Rubik virtual utilizando el ratón y el teclado.
 
-El Cubo Rubik es un rompecabezas tridimensional mecánico inventado por el escultor y profesor de arquitectura húngaro Ernő Rubik en 1974. En este proyecto, se proporciona una representación del Cubo Rubik y se implementan varios algoritmos para resolverlo.
+## 🚀 Instrucciones
 
-## Estructura del Proyecto
+1. Clona este repositorio en tu computadora.
+2. Abre el proyecto en tu entorno de desarrollo preferido.
+3. Compila el archivo `main.cpp` utilizando un compilador compatible con OpenGL.
+4. Ejecuta el programa resultante.
+5. ¡Disfruta manipulando el Cubo de Rubik virtual!
 
-El proyecto está organizado de la siguiente manera:
+## 🖥️ Tecnologías utilizadas
 
-- `src/`: Contiene los archivos fuente (`.cpp`) del proyecto.
-- `include/`: Contiene los archivos de encabezado (`.h`) del proyecto.
-- `resources/`: Contiene archivos adicionales necesarios para la interfaz gráfica.
-- `CMakeLists.txt`: Archivo de configuración de CMake para compilar el proyecto.
+- OpenGL
+- GLUT (OpenGL Utility Toolkit)
+- C++
 
-## Algoritmos Implementados
+## 🎨 Capturas de pantalla
 
-El proyecto implementa los siguientes algoritmos para resolver el Cubo Rubik:
+¡Pronto!
 
-1. Método de la Capa por Capa
-2. Método Fridrich (CFOP)
-3. Método de Capa única (Roux)
-4. Método de Petrus
+## 🤝 Contribuir
 
-Además, se incluyen algoritmos de optimización para mejorar la eficiencia de los algoritmos de resolución.
+Si deseas contribuir a este proyecto, ¡no dudes en abrir un pull request!
 
-## Requisitos
+## 📝 Licencia
 
-- Compilador de C++ compatible con C++11 o superior.
-- Bibliotecas gráficas (por determinar según la elección de la interfaz gráfica).
-
-## Uso
-
+Este proyecto está bajo la [Licencia MIT](LICENSE).
