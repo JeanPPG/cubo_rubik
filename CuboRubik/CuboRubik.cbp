@@ -47,6 +47,8 @@
 			<Add library="glu32" />
 			<Add directory="C:/Program Files/CodeBlocks/MinGW/x86_64-w64-mingw32/lib" />
 		</Linker>
+		<Unit filename="include/rotaciones.h" />
+		<Unit filename="include/rubik.h" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>

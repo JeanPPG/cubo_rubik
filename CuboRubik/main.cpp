@@ -1,97 +1,142 @@
-#include <windows.h>
-#include <GL/glew.h>
-#include <gl/glut.h>
+#include "include/rotaciones.h"
+#include "include/rubik.h"
+#include "include/cubito.h"
 
+#include <GL/glut.h>
 #include <cmath>
 #include <iostream>
-#include <ctime> // Para la generaciï¿½n de nï¿½meros aleatorios
-#include <string>
+#include <ctime>
 
+RubiksCube rubiksCube;
 
-struct RubiksCube
-{
-    // Colores de las caras de los cubos mï¿½s pequeï¿½os
-    enum Color { WHITE, YELLOW, BLUE, GREEN, RED, ORANGE };
-
-    // Representa un cubo mï¿½s pequeï¿½o del cubo de Rubik
-    struct Cube
-    {
-        Color front, back, top, bottom, left, right;
-    };
-
-    Cube cubes[3][3][3]; // Matriz 3x3x3 de cubos mï¿½s pequeï¿½os
-};
-
-// Prototipos de funciones
-void display();
-void reshape(int w, int h);
-void mouse(int button, int state, int x, int y);
-void motion(int x, int y);
-void initCube(); // Inicializa el cubo de Rubik
-void initRandomCubeColors();
-
-RubiksCube rubiksCube; // Instancia del cubo de Rubik
-
-float cameraRadius = 10.0f; // Radio de la cï¿½mara
-float cameraAngleX = 0.0f; // ï¿½ngulo de la cï¿½mara en X
-float cameraAngleY = 0.0f; // ï¿½ngulo de la cï¿½mara en Y
+float cameraRadius = 10.0f;
+float cameraAngleX = 0.0f;
+float cameraAngleY = 0.0f;
 
 int lastMouseX, lastMouseY;
 bool isDragging = false;
 
-int main(int argc, char** argv)
+void display();
+void reshape(int w, int h);
+void mouse(int button, int state, int x, int y);
+void motion(int x, int y);
+void initCube();
+void initCubeColors();
+void keyboard(unsigned char key, int x, int y);
+void drawMiniCube(float x, float y, float z, MiniCube::Color front, MiniCube::Color back,
+    MiniCube::Color top, MiniCube::Color bottom, MiniCube::Color right, MiniCube::Color left);
+
+void initCubeColors()
 {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("Rubik's Cube");
-
-    glEnable(GL_DEPTH_TEST);
-
-    // Inicializar colores aleatorios para los minicubos
-    initRandomCubeColors();
-
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-    glutMouseFunc(mouse);
-    glutMotionFunc(motion);
-
-    glutMainLoop();
-
-    return 0;
-}
-
-void initRandomCubeColors()
-{
-    srand(time(NULL)); // Semilla aleatoria basada en el tiempo actual
-
-    // Colores disponibles
-    RubiksCube::Color availableColors[] = {
-        RubiksCube::WHITE, RubiksCube::YELLOW, RubiksCube::BLUE,
-        RubiksCube::GREEN, RubiksCube::RED, RubiksCube::ORANGE
-    };
-
-    int numColors = 6;
-
+    // Asignar colores fijos para cada cara del cubo Rubik
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 3; ++k) {
-                // Barajar los colores disponibles
-                for (int m = 0; m < numColors; ++m) {
-                    int randomIndex = rand() % numColors;
-                    std::swap(availableColors[m], availableColors[randomIndex]);
-                }
+                if (i == 1 && j == 1 && k == 1) // El centro del cubo no tiene colores
+                    continue;
 
-                // Asignar colores ï¿½nicos a cada lado del minicubo
-                rubiksCube.cubes[i][j][k].front = availableColors[0];
-                rubiksCube.cubes[i][j][k].back = availableColors[1];
-                rubiksCube.cubes[i][j][k].top = availableColors[2];
-                rubiksCube.cubes[i][j][k].bottom = availableColors[3];
-                rubiksCube.cubes[i][j][k].left = availableColors[4];
-                rubiksCube.cubes[i][j][k].right = availableColors[5];
+                // Asignar colores según la posición del cubo en el arreglo
+                rubiksCube.cubes[i][j][k].top = MiniCube::WHITE;
+                rubiksCube.cubes[i][j][k].bottom = MiniCube::YELLOW;
+                rubiksCube.cubes[i][j][k].frente = MiniCube::RED;
+                rubiksCube.cubes[i][j][k].atras = MiniCube::ORANGE;
+                rubiksCube.cubes[i][j][k].right = MiniCube::GREEN;
+                rubiksCube.cubes[i][j][k].left = MiniCube::BLUE;
             }
         }
     }
+}
+
+void drawMiniCube(float x, float y, float z, MiniCube::Color front, MiniCube::Color back,
+    MiniCube::Color top, MiniCube::Color bottom, MiniCube::Color right, MiniCube::Color left)
+{
+    GLfloat colors[6][3] = {
+        {0.8f, 0.8f, 0.8f}, // WHITE
+        {0.8f, 0.8f, 0.0f}, // YELLOW
+        {0.0f, 0.0f, 0.8f}, // RED
+        {0.0f, 0.8f, 0.0f}, // BLUE
+        {0.8f, 0.0f, 0.0f}, // GREEN
+        {0.8f, 0.4f, 0.0f}  // ORANGE
+    };
+
+    glBegin(GL_QUADS);
+
+    glColor3fv(colors[front]);
+    glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
+    glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
+
+    glColor3fv(colors[back]);
+    glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
+    glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
+    glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
+    glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+
+    glColor3fv(colors[top]);
+    glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
+    glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
+
+    glColor3fv(colors[bottom]);
+    glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+    glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
+
+    glColor3fv(colors[right]);
+    glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
+    glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+
+    glColor3fv(colors[left]);
+    glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
+    glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
+    glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
+
+    glEnd();
+
+    glLineWidth(2.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glBegin(GL_LINE_LOOP);
+
+    glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+    glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
+
+    glEnd();
+
+    glBegin(GL_LINE_LOOP);
+
+    glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
+    glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
+    glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
+
+    glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
+    glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+
+    glEnd();
+
+    glBegin(GL_LINE_LOOP);
+
+    glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
+    glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
+    glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
+
+    glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
+    glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
+    glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
+    glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
+
+    glEnd();
 }
 
 void display()
@@ -99,129 +144,35 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    // Cambiar el color de fondo a gris
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Posiciona la cï¿½mara para rotar alrededor del cubo
     float cameraX = cameraRadius * sin(cameraAngleY) * cos(cameraAngleX);
     float cameraY = cameraRadius * cos(cameraAngleY);
     float cameraZ = cameraRadius * sin(cameraAngleY) * sin(cameraAngleX);
     gluLookAt(cameraX, cameraY, cameraZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-    // Definir los colores en formato GLfloat con una intensidad reducida
-    GLfloat colors[6][3] = {
-        {0.8f, 0.8f, 0.8f},  // Blanco
-        {0.8f, 0.8f, 0.0f},  // Amarillo
-        {0.0f, 0.0f, 0.8f},  // Azul
-        {0.0f, 0.8f, 0.0f},  // Verde
-        {0.8f, 0.0f, 0.0f},  // Rojo
-        {0.8f, 0.4f, 0.0f}   // Naranja
-    };
-
-    // Dibujar el cubo de Rubik
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
             for (int k = 0; k < 3; ++k) {
-                // Coordenadas de los cubos mï¿½s pequeï¿½os
                 float x = i - 1.0f;
                 float y = j - 1.0f;
                 float z = k - 1.0f;
 
-                // Dibujar el cubo mï¿½s pequeï¿½o con colores aleatorios
-                glBegin(GL_QUADS);
+                MiniCube::Color frente = rubiksCube.cubes[i][j][k].frente;
+                MiniCube::Color atras = rubiksCube.cubes[i][j][k].atras;
+                MiniCube::Color top = rubiksCube.cubes[i][j][k].top;
+                MiniCube::Color bottom = rubiksCube.cubes[i][j][k].bottom;
+                MiniCube::Color right = rubiksCube.cubes[i][j][k].right;
+                MiniCube::Color left = rubiksCube.cubes[i][j][k].left;
 
-                // Cara frontal
-                glColor3fv(colors[rubiksCube.cubes[i][j][k].front]);
-                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
-                glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
-
-                // Cara trasera
-                glColor3fv(colors[rubiksCube.cubes[i][j][k].back]);
-                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
-                glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
-                glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
-                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
-
-                // Cara superior
-                glColor3fv(colors[rubiksCube.cubes[i][j][k].top]);
-                glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
-                glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
-
-                // Cara inferior
-                glColor3fv(colors[rubiksCube.cubes[i][j][k].bottom]);
-                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
-                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
-
-                // Cara derecha
-                glColor3fv(colors[rubiksCube.cubes[i][j][k].right]);
-                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
-                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
-
-                // Cara izquierda
-                glColor3fv(colors[rubiksCube.cubes[i][j][k].left]);
-                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
-                glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
-                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
-
-                glEnd();
-                // Dibujar los bordes negros en direcciï¿½n X
-                glLineWidth(2.0); // Grosor de la lï¿½nea
-                glColor3f(0.0, 0.0, 0.0);
-                glBegin(GL_LINE_LOOP);
-
-                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
-                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
-
-                glEnd();
-
-                // Dibujar los bordes negros en direcciï¿½n Y
-                glBegin(GL_LINE_LOOP);
-
-                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
-                glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
-                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
-
-                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
-                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
-
-                glEnd();
-
-                // Dibujar los bordes negros en direcciï¿½n Z
-                glBegin(GL_LINE_LOOP);
-
-                glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
-                glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
-                glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
-
-                glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
-                glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
-                glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
-                glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
-
-                glEnd();
+                drawMiniCube(x, y, z, frente, atras, top, bottom, right, left);
             }
         }
     }
 
     glutSwapBuffers();
 }
-
 
 void reshape(int w, int h)
 {
@@ -265,4 +216,75 @@ void motion(int x, int y)
 
         glutPostRedisplay();
     }
+}
+
+void keyboard(unsigned char key, int x, int y) {
+    switch (key) {
+    case 'q':
+    case 'Q':
+        exit(0);
+        break;
+    case 'b':
+    case 'B':
+       rotateBottomLayer(rubiksCube, false);
+        glutPostRedisplay();
+        break;
+    case 'f':
+    case 'F':
+  rotateFrontLayer(rubiksCube, false);
+        glutPostRedisplay();
+        break;
+    case 'r':
+    case 'R':
+    rotateRightLayer(rubiksCube, false);
+        glutPostRedisplay();
+        break;
+    case 'l':
+  case 'L':
+    rotateLeftLayer(rubiksCube, false);
+        glutPostRedisplay();
+        break;
+    case 't':
+    case 'T':
+    rotateTopLayer(rubiksCube, false);
+        glutPostRedisplay();
+        break;
+    case 'a':
+    case 'A':
+        rotateBackLayer(rubiksCube, false);
+        glutPostRedisplay();
+        break;
+    case 'm':
+    case 'M':
+        initCubeColors();
+        glutPostRedisplay();
+        break;
+    default:
+        break;
+    }
+}
+
+void initCube()
+{
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_DEPTH_TEST);
+    initCubeColors(); // Inicializa los colores del cubo
+}
+
+int main(int argc, char **argv)
+{
+    initCube();
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Rubik's Cube");
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    glutMouseFunc(mouse);
+    glutMotionFunc(motion);
+    glutKeyboardFunc(keyboard);
+    glutMainLoop();
+    return 0;
 }
