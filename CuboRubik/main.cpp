@@ -232,7 +232,9 @@ bool isOuterLayerMove(const char* move)
 {
     // Verifica si el movimiento es un giro de capa exterior
     return strcmp(move, "B") == 0 || strcmp(move, "F") == 0 || strcmp(move, "R") == 0 ||
-           strcmp(move, "L") == 0 || strcmp(move, "U") == 0 || strcmp(move, "D") == 0;
+           strcmp(move, "L") == 0 || strcmp(move, "U") == 0 || strcmp(move, "D") == 0 ||
+           strcmp(move, "B'") == 0 || strcmp(move, "F'") == 0 || strcmp(move, "R'") == 0 ||
+           strcmp(move, "L'") == 0 || strcmp(move, "U'") == 0 || strcmp(move, "D'") == 0;
 }
 
 void scrambleRubiksCube()
@@ -278,42 +280,84 @@ void keyboard(unsigned char key, int x, int y)
         exit(0);
         break;
     case 'b':
-    case 'B':
         rotateBottomLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
     case 'f':
-    case 'F':
         rotateFrontLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
     case 'r':
-    case 'R':
         rotateRightLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
     case 'l':
-    case 'L':
         rotateLeftLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
-    case 't':
-    case 'T':
+    case 'u':
         rotateTopLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
-    case 'a':
-    case 'A':
+    case 'd':
         rotateBackLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
+    case 'B':
+        rotateBottomLayer(rubiksCube, true); // Giro inverso de la capa inferior
+        glutPostRedisplay();
+        break;
+    case 'F':
+        rotateFrontLayer(rubiksCube, true); // Giro inverso de la capa frontal
+        glutPostRedisplay();
+        break;
+    case 'R':
+        rotateRightLayer(rubiksCube, true); // Giro inverso de la capa derecha
+        glutPostRedisplay();
+        break;
+    case 'L':
+        rotateLeftLayer(rubiksCube, true); // Giro inverso de la capa izquierda
+        glutPostRedisplay();
+        break;
+    case 'U':
+        rotateTopLayer(rubiksCube, true); // Giro inverso de la capa superior
+        glutPostRedisplay();
+        break;
+    case 'D':
+        rotateBackLayer(rubiksCube, true); // Giro inverso de la capa trasera
+        glutPostRedisplay();
+        break;
     case 'm':
+        rotateMiddleLayer(rubiksCube, false);
+        glutPostRedisplay();
+        break;
     case 'M':
-        initCubeColors();
+        rotateMiddleLayer(rubiksCube, true); // Giro inverso de la capa del medio
+        glutPostRedisplay();
+        break;
+    case 'e':
+        rotateEquatorialLayer(rubiksCube, false);
+        glutPostRedisplay();
+        break;
+    case 'E':
+        rotateEquatorialLayer(rubiksCube, true); // Giro inverso de la capa equatorial
         glutPostRedisplay();
         break;
     case 's':
+        rotateStandingLayer(rubiksCube, false);
+        glutPostRedisplay();
+        break;
     case 'S':
+        rotateStandingLayer(rubiksCube, true); // Giro inverso de la capa standing
+        glutPostRedisplay();
+        break;
+    case 'o':
+    case 'O':
+        initCubeColors();
+        glutPostRedisplay();
+        break;
+    case 'p':
+    case 'P':
         scrambleRubiksCube();
         glutPostRedisplay();
         break;
@@ -321,6 +365,7 @@ void keyboard(unsigned char key, int x, int y)
         break;
     }
 }
+
 
 
 void initCube()
