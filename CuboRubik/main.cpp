@@ -24,18 +24,23 @@ void initCube();
 void initCubeColors();
 void keyboard(unsigned char key, int x, int y);
 void drawMiniCube(float x, float y, float z, MiniCube::Color front, MiniCube::Color back,
-    MiniCube::Color top, MiniCube::Color bottom, MiniCube::Color right, MiniCube::Color left);
+                  MiniCube::Color top, MiniCube::Color bottom, MiniCube::Color right, MiniCube::Color left);
+void scrambleRubiksCube();
+
 
 void initCubeColors()
 {
     // Asignar colores fijos para cada cara del cubo Rubik
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            for (int k = 0; k < 3; ++k) {
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            for (int k = 0; k < 3; ++k)
+            {
                 if (i == 1 && j == 1 && k == 1) // El centro del cubo no tiene colores
                     continue;
 
-                // Asignar colores seg�n la posici�n del cubo en el arreglo
+                // Asignar colores según la posición del cubo en el arreglo
                 rubiksCube.cubes[i][j][k].top = MiniCube::WHITE;
                 rubiksCube.cubes[i][j][k].bottom = MiniCube::YELLOW;
                 rubiksCube.cubes[i][j][k].frente = MiniCube::RED;
@@ -48,9 +53,10 @@ void initCubeColors()
 }
 
 void drawMiniCube(float x, float y, float z, MiniCube::Color front, MiniCube::Color back,
-    MiniCube::Color top, MiniCube::Color bottom, MiniCube::Color right, MiniCube::Color left)
+                  MiniCube::Color top, MiniCube::Color bottom, MiniCube::Color right, MiniCube::Color left)
 {
-    GLfloat colors[6][3] = {
+    GLfloat colors[6][3] =
+    {
         {0.8f, 0.8f, 0.8f}, // WHITE
         {0.8f, 0.8f, 0.0f}, // YELLOW
         {0.0f, 0.0f, 0.8f}, // RED
@@ -152,9 +158,12 @@ void display()
     float cameraZ = cameraRadius * sin(cameraAngleY) * sin(cameraAngleX);
     gluLookAt(cameraX, cameraY, cameraZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            for (int k = 0; k < 3; ++k) {
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            for (int k = 0; k < 3; ++k)
+            {
                 float x = i - 1.0f;
                 float y = j - 1.0f;
                 float z = k - 1.0f;
@@ -218,35 +227,79 @@ void motion(int x, int y)
     }
 }
 
-void keyboard(unsigned char key, int x, int y) {
-    switch (key) {
+
+bool isOuterLayerMove(const char* move)
+{
+    // Verifica si el movimiento es un giro de capa exterior
+    return strcmp(move, "B") == 0 || strcmp(move, "F") == 0 || strcmp(move, "R") == 0 ||
+           strcmp(move, "L") == 0 || strcmp(move, "U") == 0 || strcmp(move, "D") == 0;
+}
+
+void scrambleRubiksCube()
+{
+    const char* moves[] = {"B", "F", "R", "L", "U", "D"}; // Movimientos básicos
+    const int numMoves = 6;
+    const int numIterations = 20; // Cambia este valor según lo desees
+
+    srand(time(NULL)); // Semilla para generar números aleatorios
+
+    for (int i = 0; i < numIterations; ++i)
+    {
+        int randomMove = rand() % numMoves; // Selecciona un movimiento aleatorio
+        const char* move = moves[randomMove];
+
+        // Verifica si el movimiento es un giro de capa exterior
+        if (!isOuterLayerMove(move))
+            continue;
+
+        // Realiza el movimiento en el cubo Rubik
+        if (strcmp(move, "B") == 0)
+            rotateBottomLayer(rubiksCube, false);
+        else if (strcmp(move, "F") == 0)
+            rotateFrontLayer(rubiksCube, false);
+        else if (strcmp(move, "R") == 0)
+            rotateRightLayer(rubiksCube, false);
+        else if (strcmp(move, "L") == 0)
+            rotateLeftLayer(rubiksCube, false);
+        else if (strcmp(move, "U") == 0)
+            rotateTopLayer(rubiksCube, false);
+        else if (strcmp(move, "D") == 0)
+            rotateBackLayer(rubiksCube, false);
+    }
+}
+
+
+void keyboard(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
     case 'q':
     case 'Q':
         exit(0);
         break;
     case 'b':
     case 'B':
-       rotateBottomLayer(rubiksCube, false);
+        rotateBottomLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
     case 'f':
     case 'F':
-  rotateFrontLayer(rubiksCube, false);
+        rotateFrontLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
     case 'r':
     case 'R':
-    rotateRightLayer(rubiksCube, false);
+        rotateRightLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
     case 'l':
-  case 'L':
-    rotateLeftLayer(rubiksCube, false);
+    case 'L':
+        rotateLeftLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
     case 't':
     case 'T':
-    rotateTopLayer(rubiksCube, false);
+        rotateTopLayer(rubiksCube, false);
         glutPostRedisplay();
         break;
     case 'a':
@@ -259,10 +312,16 @@ void keyboard(unsigned char key, int x, int y) {
         initCubeColors();
         glutPostRedisplay();
         break;
+    case 's':
+    case 'S':
+        scrambleRubiksCube();
+        glutPostRedisplay();
+        break;
     default:
         break;
     }
 }
+
 
 void initCube()
 {
