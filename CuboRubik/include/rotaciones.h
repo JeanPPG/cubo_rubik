@@ -164,5 +164,88 @@ void rotateBackLayer(RubiksCube& rubiksCube, bool clockwise) {
         }
     }
 }
-#endif // ROTACIONES_H
 
+void rotateMiddleLayer(RubiksCube& rubiksCube, bool clockwise) {
+    MiniCube temp_layer[3][3];
+
+    // Guardar la capa del medio en la capa temporal
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            temp_layer[i][j] = rubiksCube.cubes[j][1][i];
+        }
+    }
+
+    // Rotar los cubitos en la capa del medio
+    if (clockwise) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                rubiksCube.cubes[j][1][i] = temp_layer[j][2 - i];
+                rotateRightFace(rubiksCube.cubes[j][1][i]);
+            }
+        }
+    } else {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                rubiksCube.cubes[j][1][i] = temp_layer[2 - j][i];
+                rotateLeftFace(rubiksCube.cubes[j][1][i]);
+            }
+        }
+    }
+}
+
+void rotateEquatorialLayer(RubiksCube& rubiksCube, bool clockwise) {
+    MiniCube temp_layer[3][3];
+
+    // Guardar la capa equatorial en la capa temporal
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            temp_layer[i][j] = rubiksCube.cubes[1][j][i];
+        }
+    }
+
+    // Rotar los cubitos en la capa equatorial
+    if (clockwise) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                rubiksCube.cubes[1][j][i] = temp_layer[j][2 - i];
+                rotateFrontFace(rubiksCube.cubes[1][j][i]);
+            }
+        }
+    } else {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                rubiksCube.cubes[1][j][i] = temp_layer[2 - j][i];
+                rotateBackFace(rubiksCube.cubes[1][j][i]);
+            }
+        }
+    }
+}
+
+void rotateStandingLayer(RubiksCube& rubiksCube, bool clockwise) {
+    MiniCube temp_layer[3][3];
+
+    // Guardar la capa standing en la capa temporal
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            temp_layer[i][j] = rubiksCube.cubes[i][j][1];
+        }
+    }
+
+    // Rotar los cubitos en la capa standing
+    if (clockwise) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                rubiksCube.cubes[i][j][1] = temp_layer[j][2 - i];
+                rotateBottomFace(rubiksCube.cubes[i][j][1]);
+            }
+        }
+    } else {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                rubiksCube.cubes[i][j][1] = temp_layer[2 - j][i];
+                rotateTopFace(rubiksCube.cubes[i][j][1]);
+            }
+        }
+    }
+}
+#endif // ROTACIONES_H
