@@ -100,14 +100,14 @@ void rotateRightLayer(RubiksCube& rubiksCube, bool clockwise) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 rubiksCube.cubes[j][2][i] = temp_layer[j][2 - i];
-                rotateTopFace(rubiksCube.cubes[j][2][i]);
+                rotateRightFace(rubiksCube.cubes[j][2][i]);
             }
         }
     } else {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 rubiksCube.cubes[j][2][i] = temp_layer[2 - j][i];
-                rotateBottomFace(rubiksCube.cubes[j][2][i]);
+                rotateLeftFace(rubiksCube.cubes[j][2][i]);
             }
         }
     }
@@ -126,14 +126,14 @@ void rotateLeftLayer(RubiksCube& rubiksCube, bool clockwise) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 rubiksCube.cubes[j][0][i] = temp_layer[j][2 - i];
-                rotateBottomFace(rubiksCube.cubes[j][0][i]);
+                rotateLeftFace(rubiksCube.cubes[j][0][i]);
             }
         }
     } else {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 rubiksCube.cubes[j][0][i] = temp_layer[2 - j][i];
-                rotateTopFace(rubiksCube.cubes[j][0][i]);
+                rotateRightFace(rubiksCube.cubes[j][0][i]);
             }
         }
     }
@@ -165,3 +165,4 @@ void rotateBackLayer(RubiksCube& rubiksCube, bool clockwise) {
     }
 }
 #endif // ROTACIONES_H
+
