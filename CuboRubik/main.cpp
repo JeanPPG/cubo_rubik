@@ -2,8 +2,10 @@
 #include "include/rubik.h"
 #include "include/cubito.h"
 #include "include/algoritmos.h"
+#include "include/timer.h"
 
 #include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <cmath>
 #include <iostream>
 #include <cstdlib>
@@ -11,6 +13,8 @@
 #include <cstring>
 #include <sstream>
 
+
+Timer timer; // Declarar una instancia global de Timer
 Rubik cuboRubik; // Objeto de la clase Rubik que representa el cubo de Rubik
 
 float radioCamara = 10.0f; // Radio de la cámara para visualizar el cubo
@@ -32,18 +36,14 @@ void menu(int eleccion);
 void teclado(unsigned char tecla, int x, int y);
 void dibujarMiniCubo(float x, float y, float z, MiniCubo::Color frente, MiniCubo::Color atras,
                      MiniCubo::Color arriba, MiniCubo::Color abajo, MiniCubo::Color derecha, MiniCubo::Color izquierda);
-void barajarCuboRubik();
+void mostrarTimer();
 
 // Función para asignar colores a cada cara del cubo Rubik
-void asignarColoresCubo()
-{
+void asignarColoresCubo() {
     // Asigna colores fijos para cada cara del cubo Rubik
-    for (int i = 0; i < 3; ++i)
-    {
-        for (int j = 0; j < 3; ++j)
-        {
-            for (int k = 0; k < 3; ++k)
-            {
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            for (int k = 0; k < 3; ++k) {
                 if (i == 1 && j == 1 && k == 1) // El centro del cubo no tiene colores
                     continue;
 
@@ -60,10 +60,8 @@ void asignarColoresCubo()
 }
 
 void dibujarMiniCubo(float x, float y, float z, MiniCubo::Color frente, MiniCubo::Color atras,
-                     MiniCubo::Color arriba, MiniCubo::Color abajo, MiniCubo::Color derecha, MiniCubo::Color izquierda)
-{
-    GLfloat colores[6][3] =
-    {
+                     MiniCubo::Color arriba, MiniCubo::Color abajo, MiniCubo::Color derecha, MiniCubo::Color izquierda) {
+    GLfloat colores[6][3] = {
         {0.8f, 0.8f, 0.8f}, // BLANCO
         {0.8f, 0.8f, 0.0f}, // AMARILLO
         {0.0f, 0.0f, 0.8f}, // ROJO
@@ -158,8 +156,7 @@ void dibujarMiniCubo(float x, float y, float z, MiniCubo::Color frente, MiniCubo
  * Función para mostrar el cubo de Rubik en la pantalla.
  * Limpia el búfer de color y el búfer de profundidad, ajusta la posición de la cámara y dibuja el cubo de Rubik.
  */
-void mostrar()
-{
+void mostrar() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar el búfer de color y el búfer de profundidad
     glLoadIdentity(); // Reiniciar la matriz de proyección
 
@@ -173,12 +170,9 @@ void mostrar()
     gluLookAt(camaraX, camaraY, camaraZ, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
 
     // Dibujar cada mini cubo del cubo Rubik
-    for (int i = 0; i < 3; ++i)
-    {
-        for (int j = 0; j < 3; ++j)
-        {
-            for (int k = 0; k < 3; ++k)
-            {
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            for (int k = 0; k < 3; ++k) {
                 float x = i - 1.0f;
                 float y = j - 1.0f;
                 float z = k - 1.0f;
@@ -194,7 +188,7 @@ void mostrar()
             }
         }
     }
-
+    mostrarTimer();
     glutSwapBuffers(); // Intercambiar los búferes
 }
 
@@ -203,8 +197,7 @@ void mostrar()
  * @param w Ancho de la ventana.
  * @param h Alto de la ventana.
  */
-void redimensionar(int w, int h)
-{
+void redimensionar(int w, int h) {
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -217,29 +210,72 @@ void redimensionar(int w, int h)
  * Función de callback para el menú.
  * @param choice La opción seleccionada en el menú.
  */
-void menuCallback(int choice)
-{
-    switch (choice)
-    {
+ // Función de callback para el menú
+void menuCallback(int choice) {
+    switch (choice) {
     case 1:
-        resolverPrincipiante(cuboRubik); // Resuelve el cubo usando el método principiante
+        timer.start(); // Iniciar el temporizador cuando se seleccione una opción del menú
+        resolverPrincipiante(cuboRubik);
         break;
     case 2:
-        resolverCapaPorCapa(cuboRubik); // Resuelve el cubo usando el método capa por capa
+        timer.start();
+        resolverCapaPorCapa(cuboRubik);
         break;
     case 3:
-        resolverFridrichCFOP(cuboRubik); // Resuelve el cubo usando el método Fridrich CFOP
+        timer.start();
+        resolverFridrichCFOP(cuboRubik);
         break;
     case 4:
-        resolverRoux(cuboRubik); // Resuelve el cubo usando el método Roux
+        timer.start();
+        resolverRoux(cuboRubik);
         break;
     case 5:
-        resolverPetrus(cuboRubik); // Resuelve el cubo usando el método Petrus
+        timer.start();
+        resolverPetrus(cuboRubik);
         break;
     default:
         break;
     }
 }
+
+// Función para mostrar el temporizador en pantalla
+void mostrarTimer() {
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, glutGet(GLUT_WINDOW_WIDTH), 0, glutGet(GLUT_WINDOW_HEIGHT));
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // Texto del temporizador
+    glColor3f(1.0, 1.0, 1.0); // Color blanco para el texto
+    std::string elapsedTime = "Tiempo: " + timer.elapsed_time();
+    glRasterPos2i(glutGet(GLUT_WINDOW_WIDTH) - 180, glutGet(GLUT_WINDOW_HEIGHT) - 25);
+    for (char c : elapsedTime) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, c);
+    }
+
+    // Fondo para el temporizador
+    glEnable(GL_BLEND); // Habilitar el blending para que el fondo sea semitransparente
+    glColor4f(0.2, 0.2, 0.2, 0.8); // Color gris oscuro con transparencia
+    glBegin(GL_QUADS);
+    glVertex2i(glutGet(GLUT_WINDOW_WIDTH) - 200, glutGet(GLUT_WINDOW_HEIGHT) - 40);
+    glVertex2i(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) - 40);
+    glVertex2i(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+    glVertex2i(glutGet(GLUT_WINDOW_WIDTH) - 200, glutGet(GLUT_WINDOW_HEIGHT));
+    glEnd();
+
+
+
+    glDisable(GL_BLEND); // Deshabilitar el blending para restaurar el comportamiento predeterminado
+
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+}
+
 
 /**
  * Función para manejar eventos del ratón.
@@ -248,29 +284,24 @@ void menuCallback(int choice)
  * @param x Coordenada x del cursor en la ventana.
  * @param y Coordenada y del cursor en la ventana.
  */
-void raton(int boton, int estado, int x, int y)
-{
+void raton(int boton, int estado, int x, int y) {
     // Si el botón izquierdo del ratón está presionado
-    if (boton == GLUT_LEFT_BUTTON)
-    {
+    if (boton == GLUT_LEFT_BUTTON) {
         // Si el estado es presionado
-        if (estado == GLUT_DOWN)
-        {
+        if (estado == GLUT_DOWN) {
             // Guardar la posición del mouse
             ultimoMouseX = x;
             ultimoMouseY = y;
             arrastrando = true;
         }
         // Si el estado es liberado
-        else if (estado == GLUT_UP)
-        {
+        else if (estado == GLUT_UP) {
             arrastrando = false;
         }
     }
 
     // Si el botón derecho del ratón está presionado
-    if (boton == GLUT_RIGHT_BUTTON && estado == GLUT_DOWN)
-    {
+    if (boton == GLUT_RIGHT_BUTTON && estado == GLUT_DOWN) {
         // Crear menú contextual
         int menu = glutCreateMenu(menuCallback); // Se asume que existe una función menuCallback para manejar las selecciones del menú
         glutAddMenuEntry("Resolver Principiante", 1);
@@ -288,10 +319,8 @@ void raton(int boton, int estado, int x, int y)
  * @param x Posición actual del cursor en el eje X.
  * @param y Posición actual del cursor en el eje Y.
  */
-void movimientoRaton(int x, int y)
-{
-    if (arrastrando)
-    {
+void movimientoRaton(int x, int y) {
+    if (arrastrando) {
         // Calcular la diferencia de movimiento del ratón desde la última posición
         int deltaX = x - ultimoMouseX;
         int deltaY = y - ultimoMouseY;
@@ -309,18 +338,17 @@ void movimientoRaton(int x, int y)
     }
 }
 
+
+
 /**
  * Función que maneja los eventos del teclado para realizar rotaciones en el cubo de Rubik.
  * @param tecla Tecla presionada por el usuario.
  * @param x Coordenada x del cursor en la ventana.
  * @param y Coordenada y del cursor en la ventana.
  */
-void teclado(unsigned char tecla, int x, int y)
-{
-    if (!rotacionEnCurso)
-    {
-        switch (tecla)
-        {
+void teclado(unsigned char tecla, int x, int y) {
+    if (!rotacionEnCurso) {
+        switch (tecla) {
 
         case 'q':
         case 'Q':
@@ -330,31 +358,41 @@ void teclado(unsigned char tecla, int x, int y)
             rotacionEnCurso = true;
             rotarCapaInferior(cuboRubik, false);
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'f':
             rotacionEnCurso = true;
             rotarCapaFrontal(cuboRubik, false);
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'r':
             rotacionEnCurso = true;
             rotarCapaDerecha(cuboRubik, false);
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'l':
             rotacionEnCurso = true;
             rotarCapaIzquierda(cuboRubik, false);
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'u':
             rotacionEnCurso = true;
             rotarCapaSuperior(cuboRubik, false);
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
 //        case 'd':
 //            rotacionEnCurso = true;
@@ -366,31 +404,41 @@ void teclado(unsigned char tecla, int x, int y)
             rotacionEnCurso = true;
             rotarCapaInferior(cuboRubik, true); // Giro inverso de la capa inferior
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'F':
             rotacionEnCurso = true;
             rotarCapaFrontal(cuboRubik, true); // Giro inverso de la capa frontal
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'R':
             rotacionEnCurso = true;
             rotarCapaDerecha(cuboRubik, true); // Giro inverso de la capa derecha
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'L':
             rotacionEnCurso = true;
             rotarCapaIzquierda(cuboRubik, true); // Giro inverso de la capa izquierda
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'U':
             rotacionEnCurso = true;
             rotarCapaSuperior(cuboRubik, true); // Giro inverso de la capa superior
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
 //        case 'D':
 //            rotacionEnCurso = true;
@@ -402,37 +450,49 @@ void teclado(unsigned char tecla, int x, int y)
             rotacionEnCurso = true;
             rotarCapaMedia(cuboRubik, false);
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'M':
             rotacionEnCurso = true;
             rotarCapaMedia(cuboRubik, true); // Giro inverso de la capa del medio
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'e':
             rotacionEnCurso = true;
             rotarCapaEquatorial(cuboRubik, false);
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'E':
             rotacionEnCurso = true;
             rotarCapaEquatorial(cuboRubik, true); // Giro inverso de la capa equatorial
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 's':
             rotacionEnCurso = true;
             rotarCapaStanding(cuboRubik, false);
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'S':
             rotacionEnCurso = true;
             rotarCapaStanding(cuboRubik, true); // Giro inverso de la capa standing
             glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            glutTimerFunc(20, [](int) {
+                rotacionEnCurso = false;
+            }, 0);
             break;
         case 'o':
         case 'O':
@@ -451,10 +511,8 @@ void teclado(unsigned char tecla, int x, int y)
  * @param x Posición del cursor en el eje X en el momento de la pulsación.
  * @param y Posición del cursor en el eje Y en el momento de la pulsación.
  */
-void teclasEspeciales(int tecla, int x, int y)
-{
-    switch (tecla)
-    {
+void teclasEspeciales(int tecla, int x, int y) {
+    switch (tecla) {
     case GLUT_KEY_UP:
         anguloCamaraX += 0.1f; // Ajustar el ángulo de la cámara hacia arriba
         glutPostRedisplay();
@@ -480,8 +538,7 @@ void teclasEspeciales(int tecla, int x, int y)
  * Función para inicializar la configuración del cubo de Rubik.
  * Configura el sombreado, la prueba de profundidad y asigna los colores iniciales del cubo.
  */
-void inicializarCubo()
-{
+void inicializarCubo() {
     glShadeModel(GL_SMOOTH); // Configurar el sombreado suave
     glEnable(GL_DEPTH_TEST); // Habilitar la prueba de profundidad para renderizado en 3D
     asignarColoresCubo(); // Inicializar los colores del cubo
@@ -494,8 +551,7 @@ void inicializarCubo()
  * @param argv Vector de argumentos de la línea de comandos.
  * @return Código de salida del programa.
  */
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     inicializarCubo(); // Inicializar el cubo de Rubik
 
     // Inicializar GLUT y configurar la ventana
@@ -512,6 +568,7 @@ int main(int argc, char **argv)
     glutDisplayFunc(mostrar); // Función de renderizado
     glutReshapeFunc(redimensionar); // Función de redimensionamiento de la ventana
     glutMouseFunc(raton); // Función de manejo de eventos de ratón
+    glutMotionFunc(movimientoRaton); //Funcion de manejo de camara
     glutKeyboardFunc(teclado); // Función de manejo de eventos de teclado normal
     glutSpecialFunc(teclasEspeciales); // Función de manejo de eventos de teclas especiales
 
