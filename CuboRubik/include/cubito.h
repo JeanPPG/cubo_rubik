@@ -1,14 +1,14 @@
 #ifndef CUBITO_H
 #define CUBITO_H
 
-// Definici贸n de la estructura MiniCubo
+// Definici髇 de la estructura MiniCubo
 struct MiniCubo {
     enum Color { BLANCO, AMARILLO, AZUL, VERDE, ROJO, NARANJA };
 
     Color frente, atras, arriba, abajo, izquierda, derecha;
 };
 
-// Funci贸n para asignar colores a un MiniCubo
+// Funci髇 para asignar colores a un MiniCubo
 void asignarColores(MiniCubo& cubo, MiniCubo::Color frente, MiniCubo::Color atras,
     MiniCubo::Color arriba, MiniCubo::Color abajo, MiniCubo::Color derecha, MiniCubo::Color izquierda) {
     cubo.frente = frente;
@@ -19,7 +19,7 @@ void asignarColores(MiniCubo& cubo, MiniCubo::Color frente, MiniCubo::Color atra
     cubo.izquierda = izquierda;
 }
 
-// Funci贸n para rotar la cara frontal de un MiniCubo
+// Funci髇 para rotar la cara frontal de un MiniCubo
 void rotarCaraFrontal(MiniCubo& cubo) {
     MiniCubo::Color temp_frontal = cubo.frente;
     cubo.frente = cubo.abajo;
@@ -28,7 +28,7 @@ void rotarCaraFrontal(MiniCubo& cubo) {
     cubo.arriba = temp_frontal;
 }
 
-// Funci贸n para rotar la cara trasera de un MiniCubo
+// Funci髇 para rotar la cara trasera de un MiniCubo
 void rotarCaraTrasera(MiniCubo& cubo) {
     MiniCubo::Color temp_trasera = cubo.atras;
     cubo.atras = cubo.abajo;
@@ -37,7 +37,7 @@ void rotarCaraTrasera(MiniCubo& cubo) {
     cubo.arriba = temp_trasera;
 }
 
-// Funci贸n para rotar la cara superior de un MiniCubo
+// Funci髇 para rotar la cara superior de un MiniCubo
 void rotarCaraSuperior(MiniCubo& cubo) {
     MiniCubo::Color temp_superior = cubo.arriba;
     cubo.arriba = cubo.derecha;
@@ -46,7 +46,7 @@ void rotarCaraSuperior(MiniCubo& cubo) {
     cubo.izquierda = temp_superior;
 }
 
-// Funci贸n para rotar la cara inferior de un MiniCubo
+// Funci髇 para rotar la cara inferior de un MiniCubo
 void rotarCaraInferior(MiniCubo& cubo) {
     MiniCubo::Color temp_inferior = cubo.abajo;
     cubo.abajo = cubo.derecha;
@@ -55,7 +55,7 @@ void rotarCaraInferior(MiniCubo& cubo) {
     cubo.izquierda = temp_inferior;
 }
 
-// Funci贸n para rotar la cara derecha de un MiniCubo
+// Funci髇 para rotar la cara derecha de un MiniCubo
 void rotarCaraDerecha(MiniCubo& cubo) {
     MiniCubo::Color temp_derecha = cubo.derecha;
     cubo.derecha = cubo.atras;
@@ -64,7 +64,7 @@ void rotarCaraDerecha(MiniCubo& cubo) {
     cubo.frente = temp_derecha;
 }
 
-// Funci贸n para rotar la cara izquierda de un MiniCubo
+// Funci髇 para rotar la cara izquierda de un MiniCubo
 void rotarCaraIzquierda(MiniCubo& cubo) {
     MiniCubo::Color temp_izquierda = cubo.izquierda;
     cubo.izquierda = cubo.atras;

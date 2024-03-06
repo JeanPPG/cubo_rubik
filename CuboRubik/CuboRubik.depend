@@ -902,7 +902,7 @@
 
 1526093414 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_print_pop.h
 
-1709684844 source:d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\main.cpp
+1709687081 source:d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\main.cpp
 	"include/rotaciones.h"
 	"include/rubik.h"
 	"include/cubito.h"
@@ -919,15 +919,14 @@
 	"rubik.h"
 	"cubito.h"
 
-1709669955 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\rubik.h
+1709687124 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\rubik.h
 	"cubito.h"
 
-1709670248 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\cubito.h
+1709687164 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\cubito.h
 
-1709673162 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\algoritmos.h
+1709687270 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\algoritmos.h
 	"rubik.h"
-	"principiante.h"
-	"fridich.h"
+	"../Fridrich/fridich.h"
 
 1709670277 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\principiante.h
 	"rubik.h"
@@ -938,4 +937,33 @@
 	"rubik.h"
 	"rotaciones.h"
 	<iostream>
+
+1709688280 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\fridrich\fridich.h
+	"../include/rubik.h"
+	"../include/rotaciones.h"
+	"../include/cubito.h"
+	"cruz.h"
+	"F2L.h"
+	"OLL.h"
+	"PLL.h"
+
+1709688420 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\fridrich\cruz.h
+	"../include/rubik.h"
+	"../include/rotaciones.h"
+	"../include/cubito.h"
+
+1709688495 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\fridrich\f2l.h
+	"../include/rubik.h"
+	"../include/rotaciones.h"
+	"../include/cubito.h"
+
+1709688547 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\fridrich\oll.h
+	"../include/rubik.h"
+	"../include/rotaciones.h"
+	"../include/cubito.h"
+
+1709688526 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\fridrich\pll.h
+	"../include/rubik.h"
+	"../include/rotaciones.h"
+	"../include/cubito.h"
 

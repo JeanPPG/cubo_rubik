@@ -4,7 +4,7 @@
 #include "rubik.h"
 #include "../Fridrich/fridich.h"
 
-// Funciones para resolver el cubo Rubik segï¿½n diferentes mï¿½todos
+// Funciones para resolver el cubo Rubik según diferentes métodos
 void resolverPrincipiante(Rubik& cuboRubik);
 void resolverCapaPorCapa(Rubik& cuboRubik);
 void resolverFridrichCFOP(Rubik& cuboRubik);
@@ -14,7 +14,7 @@ void resolverPetrus(Rubik& cuboRubik);
 
 void resolverPrincipiante(Rubik& cuboRubik)
 {
-    //construirCruzBlanca(cuboRubik);
+    //
 }
 
 void resolverCapaPorCapa(Rubik& cuboRubik)
@@ -23,7 +23,10 @@ void resolverCapaPorCapa(Rubik& cuboRubik)
 }
 void resolverFridrichCFOP(Rubik& cuboRubik)
 {
-    //solveFridich(cuboRubik);
+    ejecutarCruz(cuboRubik);
+    ejecutarF2L(cuboRubik);
+    ejecutarOLL(cuboRubik);
+    ejecutarPLL(cuboRubik);
 }
 void resolverRoux(Rubik& cuboRubik)
 {

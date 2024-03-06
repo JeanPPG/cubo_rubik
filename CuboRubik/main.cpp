@@ -13,13 +13,13 @@
 
 Rubik cuboRubik; // Objeto de la clase Rubik que representa el cubo de Rubik
 
-float radioCamara = 10.0f; // Radio de la c√°mara para visualizar el cubo
-float anguloCamaraX = 0.0f; // √Ångulo de rotaci√≥n en el eje X de la c√°mara
-float anguloCamaraY = 0.0f; // √Ångulo de rotaci√≥n en el eje Y de la c√°mara
+float radioCamara = 10.0f; // Radio de la c·mara para visualizar el cubo
+float anguloCamaraX = 0.0f; // ¡ngulo de rotaciÛn en el eje X de la c·mara
+float anguloCamaraY = 0.0f; // ¡ngulo de rotaciÛn en el eje Y de la c·mara
 
-int ultimoMouseX, ultimoMouseY; // √öltima posici√≥n del mouse
-bool arrastrando = false; // Variable para indicar si se est√° arrastrando el cubo con el mouse
-bool rotacionEnCurso = false; // Variable para indicar si hay una rotaci√≥n en curso
+int ultimoMouseX, ultimoMouseY; // ⁄ltima posiciÛn del mouse
+bool arrastrando = false; // Variable para indicar si se est· arrastrando el cubo con el mouse
+bool rotacionEnCurso = false; // Variable para indicar si hay una rotaciÛn en curso
 
 // Prototipos de funciones
 void mostrar();
@@ -34,7 +34,7 @@ void dibujarMiniCubo(float x, float y, float z, MiniCubo::Color frente, MiniCubo
                      MiniCubo::Color arriba, MiniCubo::Color abajo, MiniCubo::Color derecha, MiniCubo::Color izquierda);
 void barajarCuboRubik();
 
-// Funci√≥n para asignar colores a cada cara del cubo Rubik
+// FunciÛn para asignar colores a cada cara del cubo Rubik
 void asignarColoresCubo()
 {
     // Asigna colores fijos para cada cara del cubo Rubik
@@ -47,7 +47,7 @@ void asignarColoresCubo()
                 if (i == 1 && j == 1 && k == 1) // El centro del cubo no tiene colores
                     continue;
 
-                // Asigna colores seg√∫n la posici√≥n del cubo en el arreglo
+                // Asigna colores seg˙n la posiciÛn del cubo en el arreglo
                 cuboRubik.cubos[i][j][k].arriba = MiniCubo::AMARILLO; // Verde
                 cuboRubik.cubos[i][j][k].abajo = MiniCubo::BLANCO; // Azul
                 cuboRubik.cubos[i][j][k].frente = MiniCubo::ROJO;
@@ -112,12 +112,12 @@ void dibujarMiniCubo(float x, float y, float z, MiniCubo::Color frente, MiniCubo
 
     glEnd();
 
-    // Dibujar l√≠neas de separaci√≥n entre cubos
+    // Dibujar lÌneas de separaciÛn entre cubos
     glLineWidth(2.0);
     glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_LINE_LOOP);
 
-    // L√≠neas horizontales
+    // LÌneas horizontales
     glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
@@ -155,18 +155,18 @@ void dibujarMiniCubo(float x, float y, float z, MiniCubo::Color frente, MiniCubo
 }
 
 /**
- * Funci√≥n para mostrar el cubo de Rubik en la pantalla.
- * Limpia el b√∫fer de color y el b√∫fer de profundidad, ajusta la posici√≥n de la c√°mara y dibuja el cubo de Rubik.
+ * FunciÛn para mostrar el cubo de Rubik en la pantalla.
+ * Limpia el b˙fer de color y el b˙fer de profundidad, ajusta la posiciÛn de la c·mara y dibuja el cubo de Rubik.
  */
 void mostrar()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar el b√∫fer de color y el b√∫fer de profundidad
-    glLoadIdentity(); // Reiniciar la matriz de proyecci√≥n
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar el b˙fer de color y el b˙fer de profundidad
+    glLoadIdentity(); // Reiniciar la matriz de proyecciÛn
 
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f); // Establecer el color de fondo
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar el b√∫fer de color y el b√∫fer de profundidad
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar el b˙fer de color y el b˙fer de profundidad
 
-    // Ajustar la posici√≥n de la c√°mara para que la cara superior apunte hacia arriba
+    // Ajustar la posiciÛn de la c·mara para que la cara superior apunte hacia arriba
     float camaraX = radioCamara * sin(anguloCamaraY) * cos(anguloCamaraX);
     float camaraY = radioCamara * cos(anguloCamaraY);
     float camaraZ = radioCamara * sin(anguloCamaraY) * sin(anguloCamaraX);
@@ -195,11 +195,11 @@ void mostrar()
         }
     }
 
-    glutSwapBuffers(); // Intercambiar los b√∫feres
+    glutSwapBuffers(); // Intercambiar los b˙feres
 }
 
 /**
- * Funci√≥n para redimensionar la ventana de visualizaci√≥n.
+ * FunciÛn para redimensionar la ventana de visualizaciÛn.
  * @param w Ancho de la ventana.
  * @param h Alto de la ventana.
  */
@@ -208,33 +208,33 @@ void redimensionar(int w, int h)
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0, (double)w / (double)h, 1.0, 100.0); // Configura la perspectiva de la c√°mara
+    gluPerspective(45.0, (double)w / (double)h, 1.0, 100.0); // Configura la perspectiva de la c·mara
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
 
 /**
- * Funci√≥n de callback para el men√∫.
- * @param choice La opci√≥n seleccionada en el men√∫.
+ * FunciÛn de callback para el men˙.
+ * @param choice La opciÛn seleccionada en el men˙.
  */
 void menuCallback(int choice)
 {
     switch (choice)
     {
     case 1:
-        resolverPrincipiante(cuboRubik); // Resuelve el cubo usando el m√©todo principiante
+        resolverPrincipiante(cuboRubik); // Resuelve el cubo usando el mÈtodo principiante
         break;
     case 2:
-        resolverCapaPorCapa(cuboRubik); // Resuelve el cubo usando el m√©todo capa por capa
+        resolverCapaPorCapa(cuboRubik); // Resuelve el cubo usando el mÈtodo capa por capa
         break;
     case 3:
-        resolverFridrichCFOP(cuboRubik); // Resuelve el cubo usando el m√©todo Fridrich CFOP
+        resolverFridrichCFOP(cuboRubik); // Resuelve el cubo usando el mÈtodo Fridrich CFOP
         break;
     case 4:
-        resolverRoux(cuboRubik); // Resuelve el cubo usando el m√©todo Roux
+        resolverRoux(cuboRubik); // Resuelve el cubo usando el mÈtodo Roux
         break;
     case 5:
-        resolverPetrus(cuboRubik); // Resuelve el cubo usando el m√©todo Petrus
+        resolverPetrus(cuboRubik); // Resuelve el cubo usando el mÈtodo Petrus
         break;
     default:
         break;
@@ -242,21 +242,21 @@ void menuCallback(int choice)
 }
 
 /**
- * Funci√≥n para manejar eventos del rat√≥n.
- * @param boton Bot√≥n del rat√≥n presionado.
- * @param estado Estado del bot√≥n del rat√≥n (presionado o liberado).
+ * FunciÛn para manejar eventos del ratÛn.
+ * @param boton BotÛn del ratÛn presionado.
+ * @param estado Estado del botÛn del ratÛn (presionado o liberado).
  * @param x Coordenada x del cursor en la ventana.
  * @param y Coordenada y del cursor en la ventana.
  */
 void raton(int boton, int estado, int x, int y)
 {
-    // Si el bot√≥n izquierdo del rat√≥n est√° presionado
+    // Si el botÛn izquierdo del ratÛn est· presionado
     if (boton == GLUT_LEFT_BUTTON)
     {
         // Si el estado es presionado
         if (estado == GLUT_DOWN)
         {
-            // Guardar la posici√≥n del mouse
+            // Guardar la posiciÛn del mouse
             ultimoMouseX = x;
             ultimoMouseY = y;
             arrastrando = true;
@@ -268,39 +268,39 @@ void raton(int boton, int estado, int x, int y)
         }
     }
 
-    // Si el bot√≥n derecho del rat√≥n est√° presionado
+    // Si el botÛn derecho del ratÛn est· presionado
     if (boton == GLUT_RIGHT_BUTTON && estado == GLUT_DOWN)
     {
-        // Crear men√∫ contextual
-        int menu = glutCreateMenu(menuCallback); // Se asume que existe una funci√≥n menuCallback para manejar las selecciones del men√∫
+        // Crear men˙ contextual
+        int menu = glutCreateMenu(menuCallback); // Se asume que existe una funciÛn menuCallback para manejar las selecciones del men˙
         glutAddMenuEntry("Resolver Principiante", 1);
         glutAddMenuEntry("Resolver Capa por Capa", 2);
         glutAddMenuEntry("Resolver Fridrich (CFOP)", 3);
         glutAddMenuEntry("Resolver Roux", 4);
         glutAddMenuEntry("Resolver Petrus", 5);
-        glutAttachMenu(GLUT_RIGHT_BUTTON); // Adjuntar el men√∫ al bot√≥n derecho del rat√≥n
+        glutAttachMenu(GLUT_RIGHT_BUTTON); // Adjuntar el men˙ al botÛn derecho del ratÛn
     }
 }
 
 
 /**
- * Funci√≥n que gestiona el movimiento del rat√≥n para rotar la c√°mara.
- * @param x Posici√≥n actual del cursor en el eje X.
- * @param y Posici√≥n actual del cursor en el eje Y.
+ * FunciÛn que gestiona el movimiento del ratÛn para rotar la c·mara.
+ * @param x PosiciÛn actual del cursor en el eje X.
+ * @param y PosiciÛn actual del cursor en el eje Y.
  */
 void movimientoRaton(int x, int y)
 {
     if (arrastrando)
     {
-        // Calcular la diferencia de movimiento del rat√≥n desde la √∫ltima posici√≥n
+        // Calcular la diferencia de movimiento del ratÛn desde la ˙ltima posiciÛn
         int deltaX = x - ultimoMouseX;
         int deltaY = y - ultimoMouseY;
 
-        // Actualizar los √°ngulos de rotaci√≥n de la c√°mara seg√∫n el movimiento del rat√≥n
+        // Actualizar los ·ngulos de rotaciÛn de la c·mara seg˙n el movimiento del ratÛn
         anguloCamaraX += deltaX * 0.01f;
         anguloCamaraY += deltaY * 0.01f;
 
-        // Actualizar la √∫ltima posici√≥n del rat√≥n
+        // Actualizar la ˙ltima posiciÛn del ratÛn
         ultimoMouseX = x;
         ultimoMouseY = y;
 
@@ -310,7 +310,7 @@ void movimientoRaton(int x, int y)
 }
 
 /**
- * Funci√≥n que maneja los eventos del teclado para realizar rotaciones en el cubo de Rubik.
+ * FunciÛn que maneja los eventos del teclado para realizar rotaciones en el cubo de Rubik.
  * @param tecla Tecla presionada por el usuario.
  * @param x Coordenada x del cursor en la ventana.
  * @param y Coordenada y del cursor en la ventana.
@@ -356,12 +356,12 @@ void teclado(unsigned char tecla, int x, int y)
             glutPostRedisplay();
             glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
             break;
-        case 'd':
-            rotacionEnCurso = true;
-            rotarCapaTrasera(cuboRubik, false);
-            glutPostRedisplay();
-            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
-            break;
+//        case 'd':
+//            rotacionEnCurso = true;
+//            rotarCapaTrasera(cuboRubik, false);
+//            glutPostRedisplay();
+//            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+//            break;
         case 'B':
             rotacionEnCurso = true;
             rotarCapaInferior(cuboRubik, true); // Giro inverso de la capa inferior
@@ -446,29 +446,29 @@ void teclado(unsigned char tecla, int x, int y)
 }
 
 /**
- * Funci√≥n para gestionar las teclas especiales del teclado.
- * @param tecla C√≥digo de la tecla especial presionada.
- * @param x Posici√≥n del cursor en el eje X en el momento de la pulsaci√≥n.
- * @param y Posici√≥n del cursor en el eje Y en el momento de la pulsaci√≥n.
+ * FunciÛn para gestionar las teclas especiales del teclado.
+ * @param tecla CÛdigo de la tecla especial presionada.
+ * @param x PosiciÛn del cursor en el eje X en el momento de la pulsaciÛn.
+ * @param y PosiciÛn del cursor en el eje Y en el momento de la pulsaciÛn.
  */
 void teclasEspeciales(int tecla, int x, int y)
 {
     switch (tecla)
     {
     case GLUT_KEY_UP:
-        anguloCamaraX += 0.1f; // Ajustar el √°ngulo de la c√°mara hacia arriba
+        anguloCamaraX += 0.1f; // Ajustar el ·ngulo de la c·mara hacia arriba
         glutPostRedisplay();
         break;
     case GLUT_KEY_DOWN:
-        anguloCamaraX -= 0.1f; // Ajustar el √°ngulo de la c√°mara hacia abajo
+        anguloCamaraX -= 0.1f; // Ajustar el ·ngulo de la c·mara hacia abajo
         glutPostRedisplay();
         break;
     case GLUT_KEY_LEFT:
-        anguloCamaraY -= 0.1f; // Ajustar el √°ngulo de la c√°mara hacia la izquierda
+        anguloCamaraY -= 0.1f; // Ajustar el ·ngulo de la c·mara hacia la izquierda
         glutPostRedisplay();
         break;
     case GLUT_KEY_RIGHT:
-        anguloCamaraY += 0.1f; // Ajustar el √°ngulo de la c√°mara hacia la derecha
+        anguloCamaraY += 0.1f; // Ajustar el ·ngulo de la c·mara hacia la derecha
         glutPostRedisplay();
         break;
     default:
@@ -477,7 +477,7 @@ void teclasEspeciales(int tecla, int x, int y)
 }
 
 /**
- * Funci√≥n para inicializar la configuraci√≥n del cubo de Rubik.
+ * FunciÛn para inicializar la configuraciÛn del cubo de Rubik.
  * Configura el sombreado, la prueba de profundidad y asigna los colores iniciales del cubo.
  */
 void inicializarCubo()
@@ -488,11 +488,11 @@ void inicializarCubo()
 }
 
 /**
- * Funci√≥n principal del programa.
+ * FunciÛn principal del programa.
  * Inicializa el cubo de Rubik, configura la ventana y los eventos de OpenGL, y comienza el bucle principal de GLUT.
- * @param argc Cantidad de argumentos de la l√≠nea de comandos.
- * @param argv Vector de argumentos de la l√≠nea de comandos.
- * @return C√≥digo de salida del programa.
+ * @param argc Cantidad de argumentos de la lÌnea de comandos.
+ * @param argv Vector de argumentos de la lÌnea de comandos.
+ * @return CÛdigo de salida del programa.
  */
 int main(int argc, char **argv)
 {
@@ -501,7 +501,7 @@ int main(int argc, char **argv)
     // Inicializar GLUT y configurar la ventana
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutCreateWindow("Rubik's Cube"); // Crear una ventana con el t√≠tulo "Rubik's Cube"
+    glutCreateWindow("Rubik's Cube"); // Crear una ventana con el tÌtulo "Rubik's Cube"
 
     // Habilitar la prueba de profundidad y el blending para transparencias
     glEnable(GL_DEPTH_TEST);
@@ -509,14 +509,14 @@ int main(int argc, char **argv)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Registrar las funciones de callback para eventos de OpenGL
-    glutDisplayFunc(mostrar); // Funci√≥n de renderizado
-    glutReshapeFunc(redimensionar); // Funci√≥n de redimensionamiento de la ventana
-    glutMouseFunc(raton); // Funci√≥n de manejo de eventos de rat√≥n
-    glutKeyboardFunc(teclado); // Funci√≥n de manejo de eventos de teclado normal
-    glutSpecialFunc(teclasEspeciales); // Funci√≥n de manejo de eventos de teclas especiales
+    glutDisplayFunc(mostrar); // FunciÛn de renderizado
+    glutReshapeFunc(redimensionar); // FunciÛn de redimensionamiento de la ventana
+    glutMouseFunc(raton); // FunciÛn de manejo de eventos de ratÛn
+    glutKeyboardFunc(teclado); // FunciÛn de manejo de eventos de teclado normal
+    glutSpecialFunc(teclasEspeciales); // FunciÛn de manejo de eventos de teclas especiales
 
     // Iniciar el bucle principal de GLUT
     glutMainLoop();
 
-    return 0; // Devolver 0 como c√≥digo de salida del programa
+    return 0; // Devolver 0 como cÛdigo de salida del programa
 }
