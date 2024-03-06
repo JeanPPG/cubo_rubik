@@ -6,7 +6,7 @@
 
 El Cubo de Rubik es un rompecabezas tridimensional inventado por Ernő Rubik en 1974. Consiste en una estructura mecánica conformada por un cubo de 3x3x3 cuyas caras están divididas en cuadros de colores que pueden desplazarse.
 
-Este proyecto te permite interactuar con un Cubo de Rubik virtual utilizando el ratón y el teclado.
+Este proyecto te permite interactuar con un Cubo de Rubik virtual utilizando el teclado.
 
 ## 🚀 Instrucciones
 

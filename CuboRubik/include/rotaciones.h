@@ -4,6 +4,7 @@
 #include "rubik.h"
 #include "cubito.h" // Incluimos el archivo que contiene las funciones para rotar los cubitos
 
+// Función para rotar la capa derecha del cubo de Rubik
 void rotarCapaDerecha(Rubik& cuboRubik, bool sentidoHorario)
 {
     MiniCubo temp_capa[3][3]; // Creamos una capa temporal para guardar los cubitos
@@ -35,6 +36,7 @@ void rotarCapaDerecha(Rubik& cuboRubik, bool sentidoHorario)
     }
 }
 
+// Función para rotar la capa izquierda del cubo de Rubik
 void rotarCapaIzquierda(Rubik& cuboRubik, bool sentidoHorario) {
     MiniCubo temp_capa[3][3];
 
@@ -63,6 +65,7 @@ void rotarCapaIzquierda(Rubik& cuboRubik, bool sentidoHorario) {
     }
 }
 
+// Función para rotar la capa frontal del cubo de Rubik
 void rotarCapaFrontal(Rubik& cuboRubik, bool sentidoHorario) {
     MiniCubo temp_capa[3][3];
 
@@ -91,6 +94,7 @@ void rotarCapaFrontal(Rubik& cuboRubik, bool sentidoHorario) {
     }
 }
 
+// Función para rotar la capa superior del cubo de Rubik
 void rotarCapaSuperior(Rubik& cuboRubik, bool sentidoHorario) {
     MiniCubo temp_capa[3][3];
 
@@ -119,6 +123,7 @@ void rotarCapaSuperior(Rubik& cuboRubik, bool sentidoHorario) {
     }
 }
 
+// Función para rotar la capa inferior del cubo de Rubik
 void rotarCapaInferior(Rubik& cuboRubik, bool sentidoHorario) {
     MiniCubo temp_capa[3][3];
 
@@ -147,6 +152,7 @@ void rotarCapaInferior(Rubik& cuboRubik, bool sentidoHorario) {
     }
 }
 
+// Función para rotar la capa trasera del cubo de Rubik
 void rotarCapaTrasera(Rubik& cuboRubik, bool sentidoHorario) {
     MiniCubo temp_capa[3][3];
 
@@ -175,6 +181,7 @@ void rotarCapaTrasera(Rubik& cuboRubik, bool sentidoHorario) {
     }
 }
 
+// Función para rotar la capa media del cubo de Rubik
 void rotarCapaMedia(Rubik& cuboRubik, bool sentidoHorario) {
     MiniCubo temp_capa[3][3];
 
@@ -203,6 +210,7 @@ void rotarCapaMedia(Rubik& cuboRubik, bool sentidoHorario) {
     }
 }
 
+// Función para rotar la capa equatorial del cubo de Rubik
 void rotarCapaEquatorial(Rubik& cuboRubik, bool sentidoHorario) {
     MiniCubo temp_capa[3][3];
 
@@ -231,6 +239,7 @@ void rotarCapaEquatorial(Rubik& cuboRubik, bool sentidoHorario) {
     }
 }
 
+// Función para rotar la capa standing del cubo de Rubik
 void rotarCapaStanding(Rubik& cuboRubik, bool sentidoHorario) {
     MiniCubo temp_capa[3][3];
 
