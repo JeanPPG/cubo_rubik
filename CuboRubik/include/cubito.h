@@ -1,68 +1,76 @@
 #ifndef CUBITO_H
 #define CUBITO_H
 
-struct MiniCube {
-    enum Color { WHITE, YELLOW, BLUE, GREEN, RED, ORANGE };
+// Definición de la estructura MiniCubo
+struct MiniCubo {
+    enum Color { BLANCO, AMARILLO, AZUL, VERDE, ROJO, NARANJA };
 
-    Color frente, atras, top, bottom, left, right;
+    Color frente, atras, arriba, abajo, izquierda, derecha;
 };
 
-void assignColors(MiniCube& cube, MiniCube::Color frente, MiniCube::Color atras,
-    MiniCube::Color top, MiniCube::Color bottom, MiniCube::Color right, MiniCube::Color left) {
-    cube.frente = frente;
-    cube.atras = atras;
-    cube.top = top;
-    cube.bottom = bottom;
-    cube.right = right;
-    cube.left = left;
+// Función para asignar colores a un MiniCubo
+void asignarColores(MiniCubo& cubo, MiniCubo::Color frente, MiniCubo::Color atras,
+    MiniCubo::Color arriba, MiniCubo::Color abajo, MiniCubo::Color derecha, MiniCubo::Color izquierda) {
+    cubo.frente = frente;
+    cubo.atras = atras;
+    cubo.arriba = arriba;
+    cubo.abajo = abajo;
+    cubo.derecha = derecha;
+    cubo.izquierda = izquierda;
 }
 
-void rotateFrontFace(MiniCube& cube) {
-    MiniCube::Color temp_front = cube.frente;
-    cube.frente = cube.bottom;
-    cube.bottom = cube.atras;
-    cube.atras = cube.top;
-    cube.top = temp_front;
+// Función para rotar la cara frontal de un MiniCubo
+void rotarCaraFrontal(MiniCubo& cubo) {
+    MiniCubo::Color temp_frontal = cubo.frente;
+    cubo.frente = cubo.abajo;
+    cubo.abajo = cubo.atras;
+    cubo.atras = cubo.arriba;
+    cubo.arriba = temp_frontal;
 }
 
-void rotateBackFace(MiniCube& cube) {
-    MiniCube::Color temp_back = cube.atras;
-    cube.atras = cube.bottom;
-    cube.bottom = cube.frente;
-    cube.frente = cube.top;
-    cube.top = temp_back;
+// Función para rotar la cara trasera de un MiniCubo
+void rotarCaraTrasera(MiniCubo& cubo) {
+    MiniCubo::Color temp_trasera = cubo.atras;
+    cubo.atras = cubo.abajo;
+    cubo.abajo = cubo.frente;
+    cubo.frente = cubo.arriba;
+    cubo.arriba = temp_trasera;
 }
 
-void rotateTopFace(MiniCube& cube) {
-    MiniCube::Color temp_top = cube.top;
-    cube.top = cube.right;
-    cube.right = cube.bottom;
-    cube.bottom = cube.left;
-    cube.left = temp_top;
+// Función para rotar la cara superior de un MiniCubo
+void rotarCaraSuperior(MiniCubo& cubo) {
+    MiniCubo::Color temp_superior = cubo.arriba;
+    cubo.arriba = cubo.derecha;
+    cubo.derecha = cubo.abajo;
+    cubo.abajo = cubo.izquierda;
+    cubo.izquierda = temp_superior;
 }
 
-void rotateBottomFace(MiniCube& cube) {
-    MiniCube::Color temp_bottom = cube.bottom;
-    cube.bottom = cube.right;
-    cube.right = cube.top;
-    cube.top = cube.left;
-    cube.left = temp_bottom;
+// Función para rotar la cara inferior de un MiniCubo
+void rotarCaraInferior(MiniCubo& cubo) {
+    MiniCubo::Color temp_inferior = cubo.abajo;
+    cubo.abajo = cubo.derecha;
+    cubo.derecha = cubo.arriba;
+    cubo.arriba = cubo.izquierda;
+    cubo.izquierda = temp_inferior;
 }
 
-void rotateRightFace(MiniCube& cube) {
-    MiniCube::Color temp_right = cube.right;
-    cube.right = cube.atras;
-    cube.atras = cube.left;
-    cube.left = cube.frente;
-    cube.frente = temp_right;
+// Función para rotar la cara derecha de un MiniCubo
+void rotarCaraDerecha(MiniCubo& cubo) {
+    MiniCubo::Color temp_derecha = cubo.derecha;
+    cubo.derecha = cubo.atras;
+    cubo.atras = cubo.izquierda;
+    cubo.izquierda = cubo.frente;
+    cubo.frente = temp_derecha;
 }
 
-void rotateLeftFace(MiniCube& cube) {
-    MiniCube::Color temp_left = cube.left;
-    cube.left = cube.atras;
-    cube.atras = cube.right;
-    cube.right = cube.frente;
-    cube.frente = temp_left;
+// Función para rotar la cara izquierda de un MiniCubo
+void rotarCaraIzquierda(MiniCubo& cubo) {
+    MiniCubo::Color temp_izquierda = cubo.izquierda;
+    cubo.izquierda = cubo.atras;
+    cubo.atras = cubo.derecha;
+    cubo.derecha = cubo.frente;
+    cubo.frente = temp_izquierda;
 }
 
 #endif // CUBITO_H

@@ -1,36 +1,41 @@
 #include "include/rotaciones.h"
 #include "include/rubik.h"
 #include "include/cubito.h"
+#include "include/algoritmos.h"
 
 #include <GL/glut.h>
 #include <cmath>
 #include <iostream>
+#include <cstdlib>
 #include <ctime>
+#include <cstring>
+#include <sstream>
 
-RubiksCube rubiksCube;
+Rubik cuboRubik;
 
-float cameraRadius = 10.0f;
-float cameraAngleX = 0.0f;
-float cameraAngleY = 0.0f;
+float radioCamara = 10.0f;
+float anguloCamaraX = 0.0f;
+float anguloCamaraY = 0.0f;
 
-int lastMouseX, lastMouseY;
-bool isDragging = false;
+int ultimoMouseX, ultimoMouseY;
+bool arrastrando = false;
+bool rotacionEnCurso = false;
+void mostrar();
+void redimensionar(int w, int h);
+void raton(int boton, int estado, int x, int y);
+void movimientoRaton(int x, int y);
+void inicializarCubo();
+void asignarColoresCubo();
+void menu(int eleccion);
+void teclado(unsigned char tecla, int x, int y);
+void dibujarMiniCubo(float x, float y, float z, MiniCubo::Color frente, MiniCubo::Color atras,
+                     MiniCubo::Color arriba, MiniCubo::Color abajo, MiniCubo::Color derecha, MiniCubo::Color izquierda);
+void barajarCuboRubik();
 
-void display();
-void reshape(int w, int h);
-void mouse(int button, int state, int x, int y);
-void motion(int x, int y);
-void initCube();
-void initCubeColors();
-void keyboard(unsigned char key, int x, int y);
-void drawMiniCube(float x, float y, float z, MiniCube::Color front, MiniCube::Color back,
-                  MiniCube::Color top, MiniCube::Color bottom, MiniCube::Color right, MiniCube::Color left);
-void scrambleRubiksCube();
 
-
-void initCubeColors()
+void asignarColoresCubo()
 {
-    // Asignar colores fijos para cada cara del cubo Rubik
+    // Asigna colores fijos para cada cara del cubo Rubik
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 3; ++j)
@@ -40,64 +45,64 @@ void initCubeColors()
                 if (i == 1 && j == 1 && k == 1) // El centro del cubo no tiene colores
                     continue;
 
-                // Asignar colores segÃºn la posiciÃ³n del cubo en el arreglo
-                rubiksCube.cubes[i][j][k].top = MiniCube::WHITE;
-                rubiksCube.cubes[i][j][k].bottom = MiniCube::YELLOW;
-                rubiksCube.cubes[i][j][k].frente = MiniCube::RED;
-                rubiksCube.cubes[i][j][k].atras = MiniCube::ORANGE;
-                rubiksCube.cubes[i][j][k].right = MiniCube::GREEN;
-                rubiksCube.cubes[i][j][k].left = MiniCube::BLUE;
+                // Asigna colores según la posición del cubo en el arreglo
+                cuboRubik.cubos[i][j][k].arriba = MiniCubo::AMARILLO; // Verde
+                cuboRubik.cubos[i][j][k].abajo = MiniCubo::BLANCO; // Azul
+                cuboRubik.cubos[i][j][k].frente = MiniCubo::ROJO;
+                cuboRubik.cubos[i][j][k].atras = MiniCubo::NARANJA;
+                cuboRubik.cubos[i][j][k].derecha = MiniCubo::VERDE; // Amarillo
+                cuboRubik.cubos[i][j][k].izquierda = MiniCubo::AZUL; // Blanco
             }
         }
     }
 }
 
-void drawMiniCube(float x, float y, float z, MiniCube::Color front, MiniCube::Color back,
-                  MiniCube::Color top, MiniCube::Color bottom, MiniCube::Color right, MiniCube::Color left)
+void dibujarMiniCubo(float x, float y, float z, MiniCubo::Color frente, MiniCubo::Color atras,
+                     MiniCubo::Color arriba, MiniCubo::Color abajo, MiniCubo::Color derecha, MiniCubo::Color izquierda)
 {
-    GLfloat colors[6][3] =
+    GLfloat colores[6][3] =
     {
-        {0.8f, 0.8f, 0.8f}, // WHITE
-        {0.8f, 0.8f, 0.0f}, // YELLOW
-        {0.0f, 0.0f, 0.8f}, // RED
-        {0.0f, 0.8f, 0.0f}, // BLUE
-        {0.8f, 0.0f, 0.0f}, // GREEN
-        {0.8f, 0.4f, 0.0f}  // ORANGE
+        {0.8f, 0.8f, 0.8f}, // BLANCO
+        {0.8f, 0.8f, 0.0f}, // AMARILLO
+        {0.0f, 0.0f, 0.8f}, // ROJO
+        {0.0f, 0.8f, 0.0f}, // AZUL
+        {0.8f, 0.0f, 0.0f}, // VERDE
+        {0.8f, 0.4f, 0.0f}  // NARANJA
     };
 
     glBegin(GL_QUADS);
 
-    glColor3fv(colors[front]);
+    glColor3fv(colores[frente]);
     glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
     glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
 
-    glColor3fv(colors[back]);
+    glColor3fv(colores[atras]);
     glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
     glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
     glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
     glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
 
-    glColor3fv(colors[top]);
+    glColor3fv(colores[arriba]);
     glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
     glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
 
-    glColor3fv(colors[bottom]);
+    glColor3fv(colores[abajo]);
     glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
     glVertex3f(x - 0.02f, y - 0.02f, z - 0.02f);
 
-    glColor3fv(colors[right]);
+    glColor3fv(colores[derecha]);
     glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y + 1.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y + 1.02f, z - 0.02f);
     glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
 
-    glColor3fv(colors[left]);
+    glColor3fv(colores[izquierda]);
     glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
     glVertex3f(x - 0.02f, y + 1.02f, z + 1.02f);
     glVertex3f(x - 0.02f, y + 1.02f, z - 0.02f);
@@ -105,10 +110,12 @@ void drawMiniCube(float x, float y, float z, MiniCube::Color front, MiniCube::Co
 
     glEnd();
 
+    // Dibujar líneas de separación entre cubos
     glLineWidth(2.0);
     glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_LINE_LOOP);
 
+    // Líneas horizontales
     glVertex3f(x - 0.02f, y - 0.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y - 0.02f, z + 1.02f);
     glVertex3f(x + 1.02f, y - 0.02f, z - 0.02f);
@@ -145,7 +152,7 @@ void drawMiniCube(float x, float y, float z, MiniCube::Color front, MiniCube::Co
     glEnd();
 }
 
-void display()
+void mostrar()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -153,10 +160,11 @@ void display()
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    float cameraX = cameraRadius * sin(cameraAngleY) * cos(cameraAngleX);
-    float cameraY = cameraRadius * cos(cameraAngleY);
-    float cameraZ = cameraRadius * sin(cameraAngleY) * sin(cameraAngleX);
-    gluLookAt(cameraX, cameraY, cameraZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    // Ajustar la posición de la cámara para que la cara superior apunte hacia arriba
+    float camaraX = radioCamara * sin(anguloCamaraY) * cos(anguloCamaraX);
+    float camaraY = radioCamara * cos(anguloCamaraY);
+    float camaraZ = radioCamara * sin(anguloCamaraY) * sin(anguloCamaraX);
+    gluLookAt(camaraX, camaraY, camaraZ, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
 
     for (int i = 0; i < 3; ++i)
     {
@@ -168,14 +176,14 @@ void display()
                 float y = j - 1.0f;
                 float z = k - 1.0f;
 
-                MiniCube::Color frente = rubiksCube.cubes[i][j][k].frente;
-                MiniCube::Color atras = rubiksCube.cubes[i][j][k].atras;
-                MiniCube::Color top = rubiksCube.cubes[i][j][k].top;
-                MiniCube::Color bottom = rubiksCube.cubes[i][j][k].bottom;
-                MiniCube::Color right = rubiksCube.cubes[i][j][k].right;
-                MiniCube::Color left = rubiksCube.cubes[i][j][k].left;
+                MiniCubo::Color frente = cuboRubik.cubos[i][j][k].frente;
+                MiniCubo::Color atras = cuboRubik.cubos[i][j][k].atras;
+                MiniCubo::Color arriba = cuboRubik.cubos[i][j][k].arriba;
+                MiniCubo::Color abajo = cuboRubik.cubos[i][j][k].abajo;
+                MiniCubo::Color derecha = cuboRubik.cubos[i][j][k].derecha;
+                MiniCubo::Color izquierda = cuboRubik.cubos[i][j][k].izquierda;
 
-                drawMiniCube(x, y, z, frente, atras, top, bottom, right, left);
+                dibujarMiniCubo(x, y, z, frente, atras, arriba, abajo, derecha, izquierda);
             }
         }
     }
@@ -183,7 +191,7 @@ void display()
     glutSwapBuffers();
 }
 
-void reshape(int w, int h)
+void redimensionar(int w, int h)
 {
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
@@ -193,172 +201,224 @@ void reshape(int w, int h)
     glLoadIdentity();
 }
 
-void mouse(int button, int state, int x, int y)
+void menuCallback(int choice)
 {
-    if (button == GLUT_LEFT_BUTTON)
+    switch (choice)
     {
-        if (state == GLUT_DOWN)
+    case 1:
+        resolverPrincipiante(cuboRubik);
+        break;
+    case 2:
+        resolverCapaPorCapa(cuboRubik);
+        break;
+    case 3:
+        resolverFridrichCFOP(cuboRubik);
+        break;
+    case 4:
+        resolverRoux(cuboRubik);
+        break;
+    case 5:
+        resolverPetrus(cuboRubik);
+        break;
+    default:
+        break;
+    }
+}
+
+void raton(int boton, int estado, int x, int y)
+{
+    if (boton == GLUT_LEFT_BUTTON)
+    {
+        if (estado == GLUT_DOWN)
         {
-            lastMouseX = x;
-            lastMouseY = y;
-            isDragging = true;
+            ultimoMouseX = x;
+            ultimoMouseY = y;
+            arrastrando = true;
         }
-        else if (state == GLUT_UP)
+        else if (estado == GLUT_UP)
         {
-            isDragging = false;
+            arrastrando = false;
+        }
+    }
+    if (boton == GLUT_RIGHT_BUTTON && estado == GLUT_DOWN)
+    {
+        // Crear menú
+        int menu = glutCreateMenu(menuCallback);
+        glutAddMenuEntry("Resolver Principiante", 1);
+        glutAddMenuEntry("Resolver Capa por Capa", 2);
+        glutAddMenuEntry("Resolver Fridrich (CFOP)", 3);
+        glutAddMenuEntry("Resolver Roux", 4);
+        glutAddMenuEntry("Resolver Petrus", 5);
+        glutAttachMenu(GLUT_RIGHT_BUTTON);
+    }
+}
+
+void movimientoRaton(int x, int y)
+{
+    if (arrastrando)
+    {
+        int deltaX = x - ultimoMouseX;
+        int deltaY = y - ultimoMouseY;
+
+        anguloCamaraX += deltaX * 0.01f;
+        anguloCamaraY += deltaY * 0.01f;
+
+        ultimoMouseX = x;
+        ultimoMouseY = y;
+
+        glutPostRedisplay();
+    }
+}
+
+
+void teclado(unsigned char tecla, int x, int y)
+{
+    if (!rotacionEnCurso)
+    {
+        switch (tecla)
+        {
+
+        case 'q':
+        case 'Q':
+            exit(0);
+            break;
+        case 'b':
+            rotacionEnCurso = true;
+            rotarCapaInferior(cuboRubik, false);
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'f':
+            rotacionEnCurso = true;
+            rotarCapaFrontal(cuboRubik, false);
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'r':
+            rotacionEnCurso = true;
+            rotarCapaDerecha(cuboRubik, false);
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'l':
+            rotacionEnCurso = true;
+            rotarCapaIzquierda(cuboRubik, false);
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'u':
+            rotacionEnCurso = true;
+            rotarCapaSuperior(cuboRubik, false);
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'd':
+            rotacionEnCurso = true;
+            rotarCapaTrasera(cuboRubik, false);
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'B':
+            rotacionEnCurso = true;
+            rotarCapaInferior(cuboRubik, true); // Giro inverso de la capa inferior
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'F':
+            rotacionEnCurso = true;
+            rotarCapaFrontal(cuboRubik, true); // Giro inverso de la capa frontal
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'R':
+            rotacionEnCurso = true;
+            rotarCapaDerecha(cuboRubik, true); // Giro inverso de la capa derecha
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'L':
+            rotacionEnCurso = true;
+            rotarCapaIzquierda(cuboRubik, true); // Giro inverso de la capa izquierda
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'U':
+            rotacionEnCurso = true;
+            rotarCapaSuperior(cuboRubik, true); // Giro inverso de la capa superior
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+//        case 'D':
+//            rotacionEnCurso = true;
+//            rotarCapaTrasera(cuboRubik, true); // Giro inverso de la capa trasera
+//            glutPostRedisplay();
+//            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+//            break;
+        case 'm':
+            rotacionEnCurso = true;
+            rotarCapaMedia(cuboRubik, false);
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'M':
+            rotacionEnCurso = true;
+            rotarCapaMedia(cuboRubik, true); // Giro inverso de la capa del medio
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'e':
+            rotacionEnCurso = true;
+            rotarCapaEquatorial(cuboRubik, false);
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'E':
+            rotacionEnCurso = true;
+            rotarCapaEquatorial(cuboRubik, true); // Giro inverso de la capa equatorial
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 's':
+            rotacionEnCurso = true;
+            rotarCapaStanding(cuboRubik, false);
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'S':
+            rotacionEnCurso = true;
+            rotarCapaStanding(cuboRubik, true); // Giro inverso de la capa standing
+            glutPostRedisplay();
+            glutTimerFunc(20, [](int){rotacionEnCurso = false;}, 0);
+            break;
+        case 'o':
+        case 'O':
+            asignarColoresCubo();
+            glutPostRedisplay();
+            break;
+        default:
+            break;
         }
     }
 }
 
-void motion(int x, int y)
+void teclasEspeciales(int tecla, int x, int y)
 {
-    if (isDragging)
+    switch (tecla)
     {
-        int deltaX = x - lastMouseX;
-        int deltaY = y - lastMouseY;
-
-        cameraAngleX += deltaX * 0.01f;
-        cameraAngleY += deltaY * 0.01f;
-
-        lastMouseX = x;
-        lastMouseY = y;
-
-        glutPostRedisplay();
-    }
-}
-
-
-bool isOuterLayerMove(const char* move)
-{
-    // Verifica si el movimiento es un giro de capa exterior
-    return strcmp(move, "B") == 0 || strcmp(move, "F") == 0 || strcmp(move, "R") == 0 ||
-           strcmp(move, "L") == 0 || strcmp(move, "U") == 0 || strcmp(move, "D") == 0 ||
-           strcmp(move, "B'") == 0 || strcmp(move, "F'") == 0 || strcmp(move, "R'") == 0 ||
-           strcmp(move, "L'") == 0 || strcmp(move, "U'") == 0 || strcmp(move, "D'") == 0;
-}
-
-void scrambleRubiksCube()
-{
-    const char* moves[] = {"B", "F", "R", "L", "U", "D"}; // Movimientos bÃ¡sicos
-    const int numMoves = 6;
-    const int numIterations = 20; // Cambia este valor segÃºn lo desees
-
-    srand(time(NULL)); // Semilla para generar nÃºmeros aleatorios
-
-    for (int i = 0; i < numIterations; ++i)
-    {
-        int randomMove = rand() % numMoves; // Selecciona un movimiento aleatorio
-        const char* move = moves[randomMove];
-
-        // Verifica si el movimiento es un giro de capa exterior
-        if (!isOuterLayerMove(move))
-            continue;
-
-        // Realiza el movimiento en el cubo Rubik
-        if (strcmp(move, "B") == 0)
-            rotateBottomLayer(rubiksCube, false);
-        else if (strcmp(move, "F") == 0)
-            rotateFrontLayer(rubiksCube, false);
-        else if (strcmp(move, "R") == 0)
-            rotateRightLayer(rubiksCube, false);
-        else if (strcmp(move, "L") == 0)
-            rotateLeftLayer(rubiksCube, false);
-        else if (strcmp(move, "U") == 0)
-            rotateTopLayer(rubiksCube, false);
-        else if (strcmp(move, "D") == 0)
-            rotateBackLayer(rubiksCube, false);
-    }
-}
-
-
-void keyboard(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
-    case 'q':
-    case 'Q':
-        exit(0);
-        break;
-    case 'b':
-        rotateBottomLayer(rubiksCube, false);
+    case GLUT_KEY_UP:
+        anguloCamaraX += 0.1f; // Ajustar el ángulo de la cámara hacia arriba
         glutPostRedisplay();
         break;
-    case 'f':
-        rotateFrontLayer(rubiksCube, false);
+    case GLUT_KEY_DOWN:
+        anguloCamaraX -= 0.1f; // Ajustar el ángulo de la cámara hacia abajo
         glutPostRedisplay();
         break;
-    case 'r':
-        rotateRightLayer(rubiksCube, false);
+    case GLUT_KEY_LEFT:
+        anguloCamaraY -= 0.1f; // Ajustar el ángulo de la cámara hacia la izquierda
         glutPostRedisplay();
         break;
-    case 'l':
-        rotateLeftLayer(rubiksCube, false);
-        glutPostRedisplay();
-        break;
-    case 'u':
-        rotateTopLayer(rubiksCube, false);
-        glutPostRedisplay();
-        break;
-    case 'd':
-        rotateBackLayer(rubiksCube, false);
-        glutPostRedisplay();
-        break;
-    case 'B':
-        rotateBottomLayer(rubiksCube, true); // Giro inverso de la capa inferior
-        glutPostRedisplay();
-        break;
-    case 'F':
-        rotateFrontLayer(rubiksCube, true); // Giro inverso de la capa frontal
-        glutPostRedisplay();
-        break;
-    case 'R':
-        rotateRightLayer(rubiksCube, true); // Giro inverso de la capa derecha
-        glutPostRedisplay();
-        break;
-    case 'L':
-        rotateLeftLayer(rubiksCube, true); // Giro inverso de la capa izquierda
-        glutPostRedisplay();
-        break;
-    case 'U':
-        rotateTopLayer(rubiksCube, true); // Giro inverso de la capa superior
-        glutPostRedisplay();
-        break;
-    case 'D':
-        rotateBackLayer(rubiksCube, true); // Giro inverso de la capa trasera
-        glutPostRedisplay();
-        break;
-    case 'm':
-        rotateMiddleLayer(rubiksCube, false);
-        glutPostRedisplay();
-        break;
-    case 'M':
-        rotateMiddleLayer(rubiksCube, true); // Giro inverso de la capa del medio
-        glutPostRedisplay();
-        break;
-    case 'e':
-        rotateEquatorialLayer(rubiksCube, false);
-        glutPostRedisplay();
-        break;
-    case 'E':
-        rotateEquatorialLayer(rubiksCube, true); // Giro inverso de la capa equatorial
-        glutPostRedisplay();
-        break;
-    case 's':
-        rotateStandingLayer(rubiksCube, false);
-        glutPostRedisplay();
-        break;
-    case 'S':
-        rotateStandingLayer(rubiksCube, true); // Giro inverso de la capa standing
-        glutPostRedisplay();
-        break;
-    case 'o':
-    case 'O':
-        initCubeColors();
-        glutPostRedisplay();
-        break;
-    case 'p':
-    case 'P':
-        scrambleRubiksCube();
+    case GLUT_KEY_RIGHT:
+        anguloCamaraY += 0.1f; // Ajustar el ángulo de la cámara hacia la derecha
         glutPostRedisplay();
         break;
     default:
@@ -366,29 +426,27 @@ void keyboard(unsigned char key, int x, int y)
     }
 }
 
-
-
-void initCube()
+void inicializarCubo()
 {
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
-    initCubeColors(); // Inicializa los colores del cubo
+    asignarColoresCubo(); // Inicializa los colores del cubo
 }
 
 int main(int argc, char **argv)
 {
-    initCube();
+    inicializarCubo();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutCreateWindow("Rubik's Cube");
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-    glutMouseFunc(mouse);
-    glutMotionFunc(motion);
-    glutKeyboardFunc(keyboard);
+    glutDisplayFunc(mostrar);
+    glutReshapeFunc(redimensionar);
+    glutMouseFunc(raton);
+    glutKeyboardFunc(teclado);
+    glutSpecialFunc(teclasEspeciales);
     glutMainLoop();
     return 0;
 }

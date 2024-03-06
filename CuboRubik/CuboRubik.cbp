@@ -47,6 +47,10 @@
 			<Add library="glu32" />
 			<Add directory="C:/Program Files/CodeBlocks/MinGW/x86_64-w64-mingw32/lib" />
 		</Linker>
+		<Unit filename="include/algoritmos.h" />
+		<Unit filename="include/cubito.h" />
+		<Unit filename="include/fridich.h" />
+		<Unit filename="include/principiante.h" />
 		<Unit filename="include/rotaciones.h" />
 		<Unit filename="include/rubik.h" />
 		<Unit filename="main.cpp" />
