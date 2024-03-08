@@ -9,5 +9,4 @@
 struct Rubik {
     MiniCubo cubos[3][3][3]; // Arreglo tridimensional de MiniCubos para representar el cubo de Rubik
 };
-
 #endif // RUBIK_H

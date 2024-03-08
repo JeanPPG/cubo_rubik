@@ -10,8 +10,7 @@
 class Timer {
 private:
     std::chrono::time_point<std::chrono::steady_clock> startTime; // Almacena el momento en que comienza el temporizador
-    bool running; // Indica si el temporizador está en marcha o no
-
+    bool running;
 public:
     Timer() : running(false) {} // Constructor que inicializa el temporizador como no en marcha
 
@@ -28,7 +27,7 @@ public:
 
     // Calcula y devuelve el tiempo transcurrido como una cadena en el formato HH:MM:SS
     std::string elapsed_time() {
-        if (!running) return "00:00:00"; // Si el temporizador no está en marcha, devuelve 00:00:00
+        if (!running) return "00:00:00"; // Si el temporizador no est� en marcha, devuelve 00:00:00
 
         auto currentTime = std::chrono::steady_clock::now(); // Obtiene el momento actual
         auto elapsedTime = std::chrono::duration_cast<std::chrono::seconds>(currentTime - startTime).count(); // Calcula el tiempo transcurrido en segundos

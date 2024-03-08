@@ -1,16 +1,20 @@
 #ifndef CUBITO_H
 #define CUBITO_H
+#include <string>
 
 // Definición de la estructura MiniCubo
 struct MiniCubo {
     enum Color { BLANCO, AMARILLO, AZUL, VERDE, ROJO, NARANJA };
-
-    Color frente, atras, arriba, abajo, izquierda, derecha;
+    enum corner {urf, ubr, dlf, dfr, ulb, ufl, drb, dbl};
+    enum edge {uf, ur, ub, ul, df, dr, db, dl, fr, br, bl, fl};
+    Color frente, atras, arriba, abajo, izquierda, derecha, centro;
 };
 
 // Función para asignar colores a un MiniCubo
 void asignarColores(MiniCubo& cubo, MiniCubo::Color frente, MiniCubo::Color atras,
-    MiniCubo::Color arriba, MiniCubo::Color abajo, MiniCubo::Color derecha, MiniCubo::Color izquierda) {
+
+                    MiniCubo::Color arriba, MiniCubo::Color abajo, MiniCubo::Color derecha, MiniCubo::Color izquierda) {
+
     cubo.frente = frente;
     cubo.atras = atras;
     cubo.arriba = arriba;
