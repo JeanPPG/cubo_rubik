@@ -902,12 +902,14 @@
 
 1526093414 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\_mingw_print_pop.h
 
-1709687081 source:d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\main.cpp
+1709865090 source:d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\main.cpp
 	"include/rotaciones.h"
 	"include/rubik.h"
 	"include/cubito.h"
 	"include/algoritmos.h"
+	"include/timer.h"
 	<GL/glut.h>
+	<GL/freeglut.h>
 	<cmath>
 	<iostream>
 	<cstdlib>
@@ -919,14 +921,17 @@
 	"rubik.h"
 	"cubito.h"
 
-1709687124 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\rubik.h
+1709863703 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\rubik.h
 	"cubito.h"
 
-1709687164 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\cubito.h
+1709865686 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\cubito.h
+	<string>
 
-1709687270 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\algoritmos.h
+1709866050 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\algoritmos.h
+	"cubito.h"
 	"rubik.h"
-	"../Fridrich/fridich.h"
+	"rotaciones.h"
+	<iostream>
 
 1709670277 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\principiante.h
 	"rubik.h"
@@ -966,4 +971,16 @@
 	"../include/rubik.h"
 	"../include/rotaciones.h"
 	"../include/cubito.h"
+
+1709863703 d:\documentos\espe\tercer semestre\estructura de datos\cubo_rubik\cuborubik\include\timer.h
+	<chrono>
+	<sstream>
+	<iomanip>
+
+1426367728 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\gl\freeglut.h
+	"freeglut_std.h"
+	"freeglut_ext.h"
+
+1426367728 c:\program files\codeblocks\mingw\x86_64-w64-mingw32\include\gl\freeglut_ext.h
+	<stdarg.h>
 

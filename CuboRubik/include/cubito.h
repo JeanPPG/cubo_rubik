@@ -7,7 +7,7 @@ struct MiniCubo {
     enum Color { BLANCO, AMARILLO, AZUL, VERDE, ROJO, NARANJA };
     enum corner {urf, ubr, dlf, dfr, ulb, ufl, drb, dbl};
     enum edge {uf, ur, ub, ul, df, dr, db, dl, fr, br, bl, fl};
-    Color frente, atras, arriba, abajo, izquierda, derecha, centro;
+    Color frente, atras, arriba, abajo, izquierda, derecha, centro, color_opuesto;
 };
 
 // Función para asignar colores a un MiniCubo
